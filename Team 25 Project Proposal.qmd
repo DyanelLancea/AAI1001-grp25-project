@@ -101,6 +101,23 @@ colSums(is.na(cleaned_population))
 
 ```
 
+```{r}
+library(dplyr)
+library(readr)
+
+cleaned_population <- cleaned_population %>%
+  arrange(Entity, Year) %>%
+  group_by(Entity) %>%
+  mutate(
+    Growth = Population - lag(Population),
+    Growth_Percentage = (Population - lag(Population)) / lag(Population) * 100
+  ) %>%
+  ungroup()
+
+head(cleaned_population)
+```
+```
+
 ## 1. Background
 *Define the context and the problem you are solving.*
 
