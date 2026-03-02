@@ -141,3 +141,44 @@ graph LR
     A[User Input] --> B{Fintech Engine}
     B --> C[Blockchain/API Layer]
     C --> D[Result/Visualization]
+```
+
+
+
+```{r}
+library(dplyr)
+library(countrycode)
+
+# Add continent
+cleaned_population <- cleaned_population %>%
+  mutate(
+    Continent = countrycode(sourcevar = Entity,
+                            origin = "country.name",
+                            destination = "continent")
+  )
+
+# Check countries still missing continent
+continent_missing <- cleaned_population %>%
+  filter(is.na(Continent)) %>%
+  distinct(Entity) %>%
+  arrange(Entity)
+
+if(nrow(continent_missing) > 0){
+  cat("Countries not matched to a continent:\n")
+  print(continent_missing)
+} else {
+  cat("All countries matched to a continent.\n")
+}
+
+# Summarize: how many countries per continent (excluding NA)
+continent_summary <- cleaned_population %>%
+  filter(!is.na(Continent)) %>%
+  distinct(Entity, Continent) %>%
+  count(Continent) %>%
+  arrange(desc(n))
+
+# Preview first few rows
+head(continent_summary)
+
+
+```
