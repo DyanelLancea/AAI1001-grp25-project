@@ -116,38 +116,14 @@ cleaned_population <- cleaned_population %>%
 
 head(cleaned_population)
 ```
-```
-
-## 1. Background
-*Define the context and the problem you are solving.*
-
-In this section, provide a brief overview of the Fintech domain you are targeting (e.g., Blockchain, Personal Finance, or Regulatory Tech). 
-
-* **Problem Statement:** What is the specific friction point? 
-* **Motivation:** Why is this problem significant for the Singaporean or global market? 
-* **Target Audience:** Who will benefit from this solution?
-
-## 2. Proposal
-*Describe your solution and high-level architecture.*
-
-Detail the application or system you intend to build. 
-
-* **Solution Overview:** How does your app solve the problem?
-* **Core Functionalities:** List 3-4 key features.
-* **Technical Stack:** Mention your use of Python, R, or Java. 
-
-```{mermaid}
-graph LR
-    A[User Input] --> B{Fintech Engine}
-    B --> C[Blockchain/API Layer]
-    C --> D[Result/Visualization]
-```
 
 
 
 ```{r}
-library(dplyr)
+
 library(countrycode)
+library(dplyr)
+
 
 # Add continent
 cleaned_population <- cleaned_population %>%
@@ -182,3 +158,30 @@ head(continent_summary)
 
 
 ```
+## 1. Background
+*Define the context and the problem you are solving.*
+
+In this section, provide a brief overview of the Fintech domain you are targeting (e.g., Blockchain, Personal Finance, or Regulatory Tech). 
+
+* **Problem Statement:** What is the specific friction point? 
+* **Motivation:** Why is this problem significant for the Singaporean or global market? 
+* **Target Audience:** Who will benefit from this solution?
+
+## 2. Proposal
+*Describe your solution and high-level architecture.*
+
+Detail the application or system you intend to build. 
+
+* **Solution Overview:** How does your app solve the problem?
+* **Core Functionalities:** List 3-4 key features.
+* **Technical Stack:** Mention your use of Python, R, or Java. 
+
+```{mermaid}
+graph LR
+    A[User Input] --> B{Fintech Engine}
+    B --> C[Blockchain/API Layer]
+    C --> D[Result/Visualization]
+```
+
+
+
