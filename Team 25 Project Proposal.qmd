@@ -156,7 +156,7 @@ continent_summary <- cleaned_population %>%
 # Preview first few rows
 head(continent_summary)
 
-
+write_csv(cleaned_population, "data/cleaned_population_final.csv")
 ```
 ## 1. Background
 *Define the context and the problem you are solving.*
