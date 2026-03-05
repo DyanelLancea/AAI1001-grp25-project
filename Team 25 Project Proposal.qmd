@@ -1,5 +1,5 @@
 ---
-title: "Team 25 Project Proposal: [Insert Project Name]"
+title: "Team 25 Project Proposal AAI1001 "
 subtitle: "AAI 1001 Team Project 25"
 author: 
   - name: "Balandra Dyanel Lancea Estillore, 2502025"
@@ -18,149 +18,10 @@ format:
     self-contained: true
 ---
 
-```{r}
-library(readr)
-library(dplyr)
 
-
-population <- read_csv("data/population.csv", show_col_types = FALSE)
-male <- read_csv("data/male-population.csv", show_col_types = FALSE)
-
-cleaned_population <- population %>%
-  left_join(male,
-            by = c("Entity", "Code", "Year"),
-            suffix = c("_Total", "_Male")) %>%
-  rename(Population = `all years_Total`, Male_Population = `all years_Male`)
-
-#Validations on joined table
-#1. Missing Value
-missing_before <- colSums(is.na(cleaned_population))
-missing <- cleaned_population %>%
-  filter(is.na(Code)) %>%
-  distinct(Entity)%>%
-  arrange(Entity)
-
-cleaned_population <- cleaned_population %>%
-  filter(!is.na(Code))
-
-#Check missing values after filtering
-missing_after <- colSums(is.na(cleaned_population))
-comparison <- data.frame(
-  Before = missing_before,
-  After = missing_after
-)
-print(comparison)
-
-#2. Duplicates
-repeated <- cleaned_population %>%
-  count(Entity, Code, Year) %>%
-  filter(n > 1)
-
-#3. Gender Population Calculation
-cleaned_population <- cleaned_population %>%
-  mutate(Female_Population = Population - Male_Population)
-
-gender_mismatch <- cleaned_population %>%
-  filter(abs(Population - (Male_Population + Female_Population)) > 1)
-
-#4. Negative Values
-negative <- cleaned_population %>%
-  filter(Population < 0 |
-           Male_Population < 0 |
-           Female_Population < 0)
-
-#5. Year Type
-str(cleaned_population)
-cleaned_population <- cleaned_population %>%
-  mutate(Year = as.integer(Year))
-str(cleaned_population)
-
-#6 Year coverage check
-range(cleaned_population$Year)
-coverage_issues <- cleaned_population %>%
-  group_by(Entity, Code) %>%
-  summarise(
-    min_year = min(Year),
-    max_year = max(Year),
-    total_years = n(),
-    .groups = "drop"
-  ) %>%
-  filter(min_year != 1950 | max_year != 2023 | total_years != 74)
-
-#7. Outliers
-summary(cleaned_population$Population)
-
-#Final Check
-list(
-  count_repeated = nrow(repeated),
-  count_gender_mismatch = nrow(gender_mismatch),
-  count_negative = nrow(negative),
-  count_coverage_issues = nrow(coverage_issues)
-)
-colSums(is.na(cleaned_population))
-
-```
-
-```{r}
-library(dplyr)
-library(readr)
-
-cleaned_population <- cleaned_population %>%
-  arrange(Entity, Year) %>%
-  group_by(Entity) %>%
-  mutate(
-    Growth = Population - lag(Population),
-    Growth_Percentage = (Population - lag(Population)) / lag(Population) * 100
-  ) %>%
-  ungroup()
-
-head(cleaned_population)
-```
-
-
-
-```{r}
-
-library(countrycode)
-library(dplyr)
-
-
-# Add continent
-cleaned_population <- cleaned_population %>%
-  mutate(
-    Continent = countrycode(sourcevar = Entity,
-                            origin = "country.name",
-                            destination = "continent")
-  )
-
-# Check countries still missing continent
-continent_missing <- cleaned_population %>%
-  filter(is.na(Continent)) %>%
-  distinct(Entity) %>%
-  arrange(Entity)
-
-if(nrow(continent_missing) > 0){
-  cat("Countries not matched to a continent:\n")
-  print(continent_missing)
-} else {
-  cat("All countries matched to a continent.\n")
-}
-
-# Summarize: how many countries per continent (excluding NA)
-continent_summary <- cleaned_population %>%
-  filter(!is.na(Continent)) %>%
-  distinct(Entity, Continent) %>%
-  count(Continent) %>%
-  arrange(desc(n))
-
-# Preview first few rows
-head(continent_summary)
-
-write_csv(cleaned_population, "data/cleaned_population_final.csv")
-```
 ## 1. Background
 
-### Chosen Visualization Example
+### Chosen Visualization 
 ![World Population Cartogram by Our World in Data](population_cartogram.jpg)
 
 **Context:**
@@ -176,9 +37,10 @@ However, the story we aim to tell is one of **evolution and composition**. Popul
 
 One major strength of this visualization is that it effectively represents **perceptual scaling** by resizing countries based on population instead of land area. This allows highly populated countries such as China and India to stand out clearly, helping viewers quickly understand where most of the world’s population is concentrated. Another strength is the use of a clear **quantitative encoding** where each square represents 500,000 people. This consistent unit allows the viewer to interpret the sizes of countries more meaningfully and understand how population differences are visually calculated. Additionally, the visualization presents a high level of **information density** by including population figures for individual countries while also providing regional totals, allowing users to compare population sizes at both the country and continental levels within a single graphic.
 
-**Weaknesses:**
+**Weaknesses**
 
 Despite its effectiveness, the visualization also has several limitations. One issue is **visual clutter**, particularly in densely populated regions such as Europe where many small countries and labels are placed very close together, making them difficult to read. Small countries are also harder to notice because they are represented by only a few squares, which can make them visually insignificant compared to larger nations. Another limitation is the **ineffective use of colour encoding**, as colour choices mainly serve to differentiate neighbouring countries rather than encode meaningful categories such as regions or population groups, which reduces the potential informational value of colour. Finally, because the visualization is static it results in **temporal stagnation**, users cannot zoom in, filter regions, or interact with the data, which limits deeper exploration and makes it harder to examine specific countries or densely packed areas.
+
 ------------------------------------------------------------------------
 
 ## 2. Proposal
@@ -199,14 +61,14 @@ We have transformed the original `population.csv` into a robust dataset `clean_p
 | **Categorization** | Added `Continent` column. | The original data listed entities flatly. Grouping by continent enables high-level aggregation and color-coding to reduce visual noise. |
 
 ### Data Sources
-* **Original Source:** *Our World in Data* (Historical population metrics).
-* **Input File:** `population.csv` (Raw counts per country/year).
+* **Original Source:** *Our World in Data* (https://ourworldindata.org/population-growth).
+* **Input File:** `population.csv` (Raw counts per country/year). 
 * **Processed File:** `cleaned_population_final.csv` (Enriched with gender splits, growth metrics, and continental grouping).
 The primary data source for this project is Our World in Data, which provides reliable and publicly accessible datasets on global demographic statistics. The population growth data used in the visualization includes historical records of total population by country over multiple years. These datasets are compiled from internationally recognized sources such as the United Nations, particularly the UN World Population Prospects database. This ensures that the population figures are standardized, consistently updated, and comparable across countries. The dataset includes yearly population estimates for countries such as China, India, and United States, allowing analysis of long-term population trends.
 In addition to total population growth, the project will integrate gender-specific population data from the same platform. Our World in Data provides datasets that break down population statistics by gender, including the number of males and females in each country over time. These datasets are also largely derived from the United Nations demographic databases, which collect and estimate population statistics reported by national statistical agencies worldwide. By combining overall population growth data with gender-disaggregated population data, the project can analyse how male and female populations change at different rates across countries and over time. This integration allows deeper insights into demographic patterns such as gender imbalance, aging populations, and variations in population growth across regions.
 
 
-### Technical Stack
+### Proposed Visualizations
 * **Language:** R (via RStudio)
 * **Documentation:** Quarto (`.qmd`) for reproducible reporting.
 * **Data Manipulation:** `tidyverse` (dplyr, tidyr) for cleaning and feature engineering.

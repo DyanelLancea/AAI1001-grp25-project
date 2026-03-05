@@ -13,7 +13,7 @@
 <meta name="author" content="Muhammad Izwan Bin Azman, 2503488">
 <meta name="dcterms.date" content="2026-02-26">
 
-<title>Team 25 Project Proposal: [Insert Project Name]</title>
+<title>Team 25 Project Proposal AAI1001</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2204,7 +2204,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Team 25 Project Proposal: [Insert Project Name]</h1>
+<h1 class="title">Team 25 Project Proposal AAI1001</h1>
 <p class="subtitle lead">AAI 1001 Team Project 25</p>
 </div>
 
@@ -2527,18 +2527,10 @@ To fix unmatched values, please use the `custom_match` argument. If you think th
 </section>
 <section id="strengths-and-weaknesses" class="level3">
 <h3 class="anchored" data-anchor-id="strengths-and-weaknesses">Strengths and Weaknesses</h3>
-<p><strong>Strengths:</strong></p>
-<ul>
-<li><strong>Perceptual Scaling:</strong> By resizing countries based on population rather than land area, it corrects the visual bias where large but sparsely populated countries (like Russia or Canada) dominate standard maps.</li>
-<li><strong>Quantitative Clarity:</strong> The grid system (1 square = 500k people) allows for a tangible estimation of population size without needing to hover for tooltips.</li>
-<li><strong>Information Density:</strong> It successfully layers country-level data within broader regional aggregates, allowing viewers to see both the “trees” (countries) and the “forest” (continents).</li>
-</ul>
-<p><strong>Weaknesses:</strong></p>
-<ul>
-<li><strong>Temporal Stagnation:</strong> The visualization is a snapshot in time. It fails to capture the dramatic growth rates of Africa or the stagnation of Europe over the last 70 years.</li>
-<li><strong>Visual Clutter:</strong> In dense regions like Europe, small countries become indistinguishable clusters of squares/labels, making it difficult to extract specific data points.</li>
-<li><strong>Lack of Depth:</strong> It treats population as a monolith. It does not account for demographic nuances, such as gender ratios, which are critical for understanding social dynamics (e.g., labor markets, aging populations).</li>
-</ul>
+<p><strong>Strengths</strong></p>
+<p>One major strength of this visualization is that it effectively represents <strong>perceptual scaling</strong> by resizing countries based on population instead of land area. This allows highly populated countries such as China and India to stand out clearly, helping viewers quickly understand where most of the world’s population is concentrated. Another strength is the use of a clear <strong>quantitative encoding</strong> where each square represents 500,000 people. This consistent unit allows the viewer to interpret the sizes of countries more meaningfully and understand how population differences are visually calculated. Additionally, the visualization presents a high level of <strong>information density</strong> by including population figures for individual countries while also providing regional totals, allowing users to compare population sizes at both the country and continental levels within a single graphic.</p>
+<p><strong>Weaknesses</strong></p>
+<p>Despite its effectiveness, the visualization also has several limitations. One issue is <strong>visual clutter</strong>, particularly in densely populated regions such as Europe where many small countries and labels are placed very close together, making them difficult to read. Small countries are also harder to notice because they are represented by only a few squares, which can make them visually insignificant compared to larger nations. Another limitation is the <strong>ineffective use of colour encoding</strong>, as colour choices mainly serve to differentiate neighbouring countries rather than encode meaningful categories such as regions or population groups, which reduces the potential informational value of colour. Finally, because the visualization is static it results in <strong>temporal stagnation</strong>, users cannot zoom in, filter regions, or interact with the data, which limits deeper exploration and makes it harder to examine specific countries or densely packed areas.</p>
 <hr>
 </section>
 </section>
@@ -2592,9 +2584,9 @@ To fix unmatched values, please use the `custom_match` argument. If you think th
 <section id="data-sources" class="level3">
 <h3 class="anchored" data-anchor-id="data-sources">Data Sources</h3>
 <ul>
-<li><strong>Original Source:</strong> <em>Our World in Data</em> (Historical population metrics).</li>
+<li><strong>Original Source:</strong> <em>Our World in Data</em> (https://ourworldindata.org/population-growth).</li>
 <li><strong>Input File:</strong> <code>population.csv</code> (Raw counts per country/year).</li>
-<li><strong>Processed File:</strong> <code>cleaned_population_final.csv</code> (Enriched with gender splits, growth metrics, and continental grouping).</li>
+<li><strong>Processed File:</strong> <code>cleaned_population_final.csv</code> (Enriched with gender splits, growth metrics, and continental grouping). The primary data source for this project is Our World in Data, which provides reliable and publicly accessible datasets on global demographic statistics. The population growth data used in the visualization includes historical records of total population by country over multiple years. These datasets are compiled from internationally recognized sources such as the United Nations, particularly the UN World Population Prospects database. This ensures that the population figures are standardized, consistently updated, and comparable across countries. The dataset includes yearly population estimates for countries such as China, India, and United States, allowing analysis of long-term population trends. In addition to total population growth, the project will integrate gender-specific population data from the same platform. Our World in Data provides datasets that break down population statistics by gender, including the number of males and females in each country over time. These datasets are also largely derived from the United Nations demographic databases, which collect and estimate population statistics reported by national statistical agencies worldwide. By combining overall population growth data with gender-disaggregated population data, the project can analyse how male and female populations change at different rates across countries and over time. This integration allows deeper insights into demographic patterns such as gender imbalance, aging populations, and variations in population growth across regions.</li>
 </ul>
 </section>
 <section id="technical-stack" class="level3">
