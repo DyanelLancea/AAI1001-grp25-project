@@ -47,12 +47,12 @@ Despite its effectiveness, the visualization also has several limitations. One i
 ## 2. Proposal
 
 ### 2.1 Proposed Solution & Architecture
-We propose building a **Dynamic Population Dashboard** using R. Instead of a static cartogram, we will utilize animated visualizations (such as an Animated Bubble Chart or a Racing Bar Chart) to visualize the trajectory of growth.
+We propose building a **Dynamic Population Dashboard** using R. Instead of a static cartogram, we will implement a single, interactive **world choropleth map** that focuses on gender imbalance. The map will include simple controls (e.g., year slider and continent filters) and may use animation via `gganimate` or interactivity via `plotly` to show how the same map changes over time.
 
 The system will ingest raw population data, process it to include demographic splits and derived metrics, and render it using `ggplot2` and `gganimate` (or `plotly`) to allow users to observe changes from 1950 to 2024.
 
 ### 2.2 Improvements & Justifications
-We have transformed the original `population.csv` into a robust dataset `clean_population_final.csv`. The specific improvements are detailed below:
+We have transformed the original dataset `population.csv` into a robust dataset `clean_population_final.csv`. The specific improvements are detailed below:
 
 | Improvement | Action Taken | Justification |
 |:---|:---|:---|
@@ -62,20 +62,18 @@ We have transformed the original `population.csv` into a robust dataset `clean_p
 | **Categorization** | Added `Continent` column. | The original data listed entities flatly. Grouping by continent enables high-level aggregation and color-coding to reduce visual noise. |
 
 ### 2.3 Proposed Visualization Improvements & Justifications
+To address the weaknesses of the original static cartogram (visual clutter, weak colour encoding, and lack of temporal context), we will implement **one primary improved visualization** on top of the engineered dataset:
 
-To address the weaknesses of the original static cartogram (visual clutter, weak colour encoding, and lack of temporal context), we plan to implement **two key improved visualizations** on top of the engineered dataset:
 
-1. **Global Gender-Imbalance Choropleth Map**
-   - **Design:** A world choropleth where each country is shaded based on its gender imbalance (e.g., male–female difference as a proportion of total population). We will use a **diverging colour scale centered at “balanced”**: countries with more females will be shown in shades of **pink**, countries with more males in shades of **blue**, and **white** will represent a near-balanced population. Darker shades indicate larger imbalances, while lighter shades indicate smaller deviations from balance.
-   - **Improvement over original:** Instead of colours merely separating neighbouring countries, colour now directly encodes a **meaningful demographic variable (gender imbalance)**. The map also reduces **visual clutter** by aggregating to country polygons instead of small squares, making it easier to compare regions at a glance. This design makes it immediately clear **where** gender imbalances are strongest and whether they favour males or females, which is information not visible in the original cartogram.
-   - **Justification:** This visualization links directly to our enriched dataset with `Male_Population` and `Female_Population`. By using a single, interpretable colour scale and intensity, we highlight demographic structure rather than just population size. It also supports storytelling about the **geography of gender imbalance**, something the original visualization does not capture.
+- **Design**  
+  A world choropleth where each country is shaded based on its gender imbalance (e.g., male–female difference as a proportion of total population). We will use a **diverging colour scale centered at “balanced”**: countries with more females will be shown in shades of **pink**, countries with more males in shades of **blue**, and **white** will represent a near-balanced population. Darker shades indicate larger imbalances, while lighter shades indicate smaller deviations from balance. A **year slider** will allow users to move from 1950 to 2023 using the same map layout, and simple filters (e.g., by continent) will reduce clutter when focusing on specific regions.
 
-2. **Temporal Line Chart of Gender Imbalance for Selected Countries/Continents**
-   - **Design:** A time-series line chart where the y-axis shows **average gender imbalance** (e.g., male–female ratio or difference) and the x-axis shows **year**. To avoid a “spaghetti plot”, we will focus on a curated subset: for example, the **top 5 male-dominant countries** and **top 5 female-dominant countries** (by average imbalance over a chosen period), or the **continental averages**. Each line will be clearly labelled, with separate colours or line types distinguishing male-dominant vs female-dominant groups.
-   - **Improvement over original:** This visualization directly addresses the **temporal stagnation** of the original cartogram by showing how gender imbalance **evolves over time**, not just at a single point. Because we limit the number of lines to a small, interpretable set, we reduce clutter while still capturing contrasting patterns between different regions or countries.
-   - **Justification:** The line chart leverages our `Growth` and gender-specific variables to go beyond static totals and reveal **dynamics**: whether gender imbalance is widening, narrowing, or stable. This supports our intended story about **evolution and composition** of populations and allows viewers to compare demographic trajectories across regions without overwhelming them with too many series.
+- **Improvement over original**  
+  Instead of colours merely separating neighbouring countries, colour now directly encodes a **meaningful demographic variable (gender imbalance)**. The choropleth reduces **visual clutter** by using familiar country polygons instead of small squares and lets viewers zoom/filter to specific regions. The year slider (and optional animation) addresses **temporal stagnation** by allowing users to see how gender imbalance changes over time on the same map.
 
-Together, these two improved visualizations complement the original population-focused cartogram by shifting the emphasis from “where people live” to **how demographic structures differ across space and change over time**, while directly tackling the identified issues of colour encoding, clutter, and lack of interactivity/temporal insight.
+- **Justification**  
+  This visualization links directly to our enriched dataset with `Male_Population` and `Female_Population`, as well as our derived gender-imbalance index. By focusing our design and interactivity on a single, interpretable map, we highlight both the **geography** and the **evolution** of gender imbalance, while staying within the “one main chart” constraint of the project brief.
+
 
 
 ### 2.4 Data Sources
@@ -88,7 +86,7 @@ The primary data source for this project is Our World in Data, which provides re
 In addition to total population growth, the project will integrate gender-specific population data from the same platform. Our World in Data provides datasets that break down population statistics by gender, including the number of males and females in each country over time. These datasets are also largely derived from the United Nations demographic databases, which collect and estimate population statistics reported by national statistical agencies worldwide. By combining overall population growth data with gender-disaggregated population data, the project can analyse how male and female populations change at different rates across countries and over time. This integration allows deeper insights into demographic patterns such as gender imbalance, aging populations, and variations in population growth across regions.
 
 
-### 2.5 Detailed Workflow
+### 2.5 Detailed Workflow from raw to visualization-ready data
 
 Our data engineering workflow transforms the original raw CSVs into a single, tidy, visualization-ready table:
 
@@ -129,7 +127,7 @@ Our data engineering workflow transforms the original raw CSVs into a single, ti
 
 8. **Export visualization-ready dataset**
    - Finally, we save the cleaned and enriched table as `cleaned_population_final.csv`.
-   - This file contains, for each country–year: `Entity`, `Code`, `Year`, `Population`, `Male_Population`, `Female_Population`, `Growth`, `Growth_Percentage`, and `Continent`. It serves as the single, reproducible input for our improved visualizations (choropleth map and temporal line chart).
+   - This file contains, for each country–year: `Entity`, `Code`, `Year`, `Population`, `Male_Population`, `Female_Population`, `Growth`, `Growth_Percentage`, and `Continent`. It serves as the single, reproducible input for our improved choropleth map.
 
 ### 2.5 Data Analysis
 
@@ -145,6 +143,6 @@ In addition to producing visualizations, we plan to conduct basic data analysis 
   With `Growth_Percentage`, we will explore whether countries with **high population growth** also tend to have stronger gender imbalances. This will be done using simple summaries (correlations and grouped comparisons) and visual aids such as scatter plots.
 
 - **Identification of outlier countries**  
-  Finally, we will identify countries with **unusually high or low** gender imbalance compared to others in the same region, and discuss possible explanations (e.g., migration, policy, or social factors). These outliers will be highlighted in both the choropleth and the line chart to connect the analysis back to the visualizations.
+  Finally, we will identify countries with **unusually high or low** gender imbalance compared to others in the same region, and discuss possible explanations (e.g., migration, policy, or social factors). These outliers will be highlighted on the choropleth map to connect the analysis back to the visualization.
 
 ### 2.6 Work Distribution
