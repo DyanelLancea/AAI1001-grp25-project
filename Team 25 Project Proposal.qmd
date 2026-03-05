@@ -159,28 +159,60 @@ head(continent_summary)
 write_csv(cleaned_population, "data/cleaned_population_final.csv")
 ```
 ## 1. Background
-Show and explain the chosen visualization example, and the story to tell
 
-The visualization created by Our World in Data presents a world population cartogram, where each small square represents 500,000 people in 2018. Instead of using the true geographic size of countries, the map scales each country according to its population size, allowing viewers to quickly see where the majority of the world’s population is located. In this representation, highly populated countries such as China and India appear significantly larger compared to countries with smaller populations. The visualization effectively communicates the distribution of the global population and allows comparisons between countries and regions. However, the original visualization primarily focuses on overall population counts and growth without providing deeper insights into demographic differences within populations.
-To extend this visualization, we plan to integrate gender-based population data provided by the same website to analyse how male and female populations grow at different rates across countries over time. For example, countries such as Japan and Germany have aging populations where female populations may grow faster due to higher life expectancy, while countries such as Nigeria may experience rapid growth across both genders due to higher birth rates. By incorporating gender data, the visualization can reveal patterns such as gender imbalance, demographic aging, and differences in population growth trends across regions. This would provide a more comprehensive understanding of global population changes, allowing users to not only observe where populations are concentrated but also how gender dynamics influence population growth in different countries over time.
+### Chosen Visualization Example
+![World Population Cartogram by Our World in Data](population_cartogram.jpg)
 
-Strength and Weaknesses
-One major strength of this visualization is that it effectively represents population proportions by resizing countries based on population instead of land area. This allows highly populated countries such as China and India to stand out clearly, helping viewers quickly understand where most of the world’s population is concentrated. Another strength is the use of a clear quantitative encoding where each square represents 500,000 people. This consistent unit allows the viewer to interpret the sizes of countries more meaningfully and understand how population differences are visually calculated. Additionally, the visualization presents a high level of information density by including population figures for individual countries while also providing regional totals, allowing users to compare population sizes at both the country and continental levels within a single graphic.
+**Context:**
+The chosen visualization is a **World Population Cartogram** created by *Our World in Data*. In this visualization, each small square represents 500,000 people (based on 2018 data). Unlike standard geographic maps which scale based on land mass, this map distorts the geometry of countries relative to their total population size.
 
-Despite its effectiveness, the visualization also has several limitations. One issue is visual clutter, particularly in densely populated regions such as Europe where many small countries and labels are placed very close together, making them difficult to read. Small countries are also harder to notice because they are represented by only a few squares, which can make them visually insignificant compared to larger nations. Another limitation is that the colour choices mainly serve to differentiate neighbouring countries rather than encode meaningful categories such as regions or population groups, which reduces the potential informational value of colour. Finally, because the visualization is static, users cannot zoom in, filter regions, or interact with the data, which limits deeper exploration and makes it harder to examine specific countries or densely packed areas.
+### The Story to Tell
+The original visualization tells a static story of **concentration**: it highlights that the majority of humans live in Asia, with China and India dominating the visual landscape.
 
+However, the story we aim to tell is one of **evolution and composition**. Population is not just a total number; it is dynamic. We want to shift the narrative from *"Where are people living in 2018?"* to *"How has the global population center shifted over time, and what are the demographic drivers (gender) behind this growth?"* By adding the dimension of time and gender composition, we aim to tell the story of the rise of the Global South and the demographic distinctiveness of different regions.
 
-**Chosen Visualisation example:** What is the specific friction point? 
-**Story to tell:** xx
-**strengths and weaknesses:** xx
+### Strengths and Weaknesses
+**Strengths:**
+
+* **Perceptual Scaling:** By resizing countries based on population rather than land area, it corrects the visual bias where large but sparsely populated countries (like Russia or Canada) dominate standard maps.
+* **Quantitative Clarity:** The grid system (1 square = 500k people) allows for a tangible estimation of population size without needing to hover for tooltips.
+* **Information Density:** It successfully layers country-level data within broader regional aggregates, allowing viewers to see both the "trees" (countries) and the "forest" (continents).
+
+**Weaknesses:**
+
+* **Temporal Stagnation:** The visualization is a snapshot in time. It fails to capture the dramatic growth rates of Africa or the stagnation of Europe over the last 70 years.
+* **Visual Clutter:** In dense regions like Europe, small countries become indistinguishable clusters of squares/labels, making it difficult to extract specific data points.
+* **Lack of Depth:** It treats population as a monolith. It does not account for demographic nuances, such as gender ratios, which are critical for understanding social dynamics (e.g., labor markets, aging populations).
+
+------------------------------------------------------------------------
 
 ## 2. Proposal
-*Describe your solution and high-level architecture.*
 
-Detail the application or system you intend to build. 
+### Proposed Solution & Architecture
+We propose building a **Dynamic Population Dashboard** using R. Instead of a static cartogram, we will utilize animated visualizations (such as an Animated Bubble Chart or a Racing Bar Chart) to visualize the trajectory of growth.
 
-**Propose improvements :** xx
-**Details on the data sources you plan to use.:** xx
-**Technical Stack:** xx 
+The system will ingest raw population data, process it to include demographic splits and derived metrics, and render it using `ggplot2` and `gganimate` (or `plotly`) to allow users to observe changes from 1950 to 2024.
 
+### Improvements & Justifications
+We have transformed the original `population.csv` into a robust dataset `clean_population_final.csv`. The specific improvements are detailed below:
 
+| Improvement | Action Taken | Justification |
+|:---|:---|:---|
+| **Standardization** | Renamed `all years` to `Population`. | "All years" is ambiguous. Standardizing the variable name ensures code readability and cleaner axis labels in plotting. |
+| **Demographic Enrichment** | Integrated `Male_Population` and `Female_Population`. | The original dataset lacked depth. Adding gender allows us to analyze sex ratios and detect demographic anomalies (e.g., skewing due to migration or policy). |
+| **Derived Metrics** | Calculated `Growth` (Absolute) and `Growth_Percentage`. | Raw numbers don't tell the whole story. Relative growth percentages allow for fair comparisons between small emerging nations and large developed ones. |
+| **Categorization** | Added `Continent` column. | The original data listed entities flatly. Grouping by continent enables high-level aggregation and color-coding to reduce visual noise. |
+
+### Data Sources
+* **Original Source:** *Our World in Data* (Historical population metrics).
+* **Input File:** `population.csv` (Raw counts per country/year).
+* **Processed File:** `cleaned_population_final.csv` (Enriched with gender splits, growth metrics, and continental grouping).
+
+### Technical Stack
+* **Language:** R (via RStudio)
+* **Documentation:** Quarto (`.qmd`) for reproducible reporting.
+* **Data Manipulation:** `tidyverse` (dplyr, tidyr) for cleaning and feature engineering.
+* **Visualization:**
+    * `ggplot2`: For static base layers.
+    * `gganimate` / `plotly`: To transform static charts into time-series animations, addressing the "static" weakness of the original example.
+    * `scales`: For formatting large population numbers (e.g., converting 1,000,000 to "1M").
