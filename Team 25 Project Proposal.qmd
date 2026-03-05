@@ -131,7 +131,7 @@ Our data engineering workflow transforms the original raw CSVs into a single, ti
    - Finally, we save the cleaned and enriched table as `cleaned_population_final.csv`.
    - This file contains, for each country–year: `Entity`, `Code`, `Year`, `Population`, `Male_Population`, `Female_Population`, `Growth`, `Growth_Percentage`, and `Continent`. It serves as the single, reproducible input for our improved visualizations (choropleth map and temporal line chart).
 
-### 2.5 Data Analysis
+### 2.6 Data Analysis
 
 In addition to producing visualizations, we plan to conduct basic data analysis on the cleaned dataset to support our story:
 
@@ -147,4 +147,29 @@ In addition to producing visualizations, we plan to conduct basic data analysis 
 - **Identification of outlier countries**  
   Finally, we will identify countries with **unusually high or low** gender imbalance compared to others in the same region, and discuss possible explanations (e.g., migration, policy, or social factors). These outliers will be highlighted in both the choropleth and the line chart to connect the analysis back to the visualizations.
 
-### 2.6 Work Distribution
+### 2.7 Work Distribution
+
+```{r}
+#| echo: false
+#| message: false
+library(knitr)
+
+work_dist_final <- data.frame(
+  Task = c("Project Background", "Original Analysis", "Design Proposal", 
+           "Data Engineering — Cleaning", "Data Engineering — Transformation", 
+           "Improved Visualisation", "Technical Integration", "Conclusion"),
+  Allocation = c("Lance", "Joash", "Everyone", "Everyone", "Izwan", "Tanvi", "Wei Hao", "Everyone"), 
+  Responsibility = c(
+    "Describe project topic, objectives, and original context.",
+    "Combined analysis of original design and effectiveness.",
+    "Propose dynamic solution and justify improvements.",
+    "R code for data ingestion and standardization.",
+    "Derive gender splits, growth metrics, and continents.",
+    "Create the improved visualization and interpret results.",
+    "Assemble Quarto file and check reproducibility.",
+    "Summarize findings and final project impact."
+  )
+)
+
+kable(work_dist_final)
+```
