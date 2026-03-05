@@ -172,18 +172,13 @@ The original visualization tells a static story of **concentration**: it highlig
 However, the story we aim to tell is one of **evolution and composition**. Population is not just a total number; it is dynamic. We want to shift the narrative from *"Where are people living in 2018?"* to *"How has the global population center shifted over time, and what are the demographic drivers (gender) behind this growth?"* By adding the dimension of time and gender composition, we aim to tell the story of the rise of the Global South and the demographic distinctiveness of different regions.
 
 ### Strengths and Weaknesses
-**Strengths:**
+**Strengths**
 
-* **Perceptual Scaling:** By resizing countries based on population rather than land area, it corrects the visual bias where large but sparsely populated countries (like Russia or Canada) dominate standard maps.
-* **Quantitative Clarity:** The grid system (1 square = 500k people) allows for a tangible estimation of population size without needing to hover for tooltips.
-* **Information Density:** It successfully layers country-level data within broader regional aggregates, allowing viewers to see both the "trees" (countries) and the "forest" (continents).
+One major strength of this visualization is that it effectively represents **perceptual scaling** by resizing countries based on population instead of land area. This allows highly populated countries such as China and India to stand out clearly, helping viewers quickly understand where most of the world’s population is concentrated. Another strength is the use of a clear **quantitative encoding** where each square represents 500,000 people. This consistent unit allows the viewer to interpret the sizes of countries more meaningfully and understand how population differences are visually calculated. Additionally, the visualization presents a high level of **information density** by including population figures for individual countries while also providing regional totals, allowing users to compare population sizes at both the country and continental levels within a single graphic.
 
 **Weaknesses:**
 
-* **Temporal Stagnation:** The visualization is a snapshot in time. It fails to capture the dramatic growth rates of Africa or the stagnation of Europe over the last 70 years.
-* **Visual Clutter:** In dense regions like Europe, small countries become indistinguishable clusters of squares/labels, making it difficult to extract specific data points.
-* **Lack of Depth:** It treats population as a monolith. It does not account for demographic nuances, such as gender ratios, which are critical for understanding social dynamics (e.g., labor markets, aging populations).
-
+Despite its effectiveness, the visualization also has several limitations. One issue is **visual clutter**, particularly in densely populated regions such as Europe where many small countries and labels are placed very close together, making them difficult to read. Small countries are also harder to notice because they are represented by only a few squares, which can make them visually insignificant compared to larger nations. Another limitation is the **ineffective use of colour encoding**, as colour choices mainly serve to differentiate neighbouring countries rather than encode meaningful categories such as regions or population groups, which reduces the potential informational value of colour. Finally, because the visualization is static it results in **temporal stagnation**, users cannot zoom in, filter regions, or interact with the data, which limits deeper exploration and makes it harder to examine specific countries or densely packed areas.
 ------------------------------------------------------------------------
 
 ## 2. Proposal
@@ -207,6 +202,9 @@ We have transformed the original `population.csv` into a robust dataset `clean_p
 * **Original Source:** *Our World in Data* (Historical population metrics).
 * **Input File:** `population.csv` (Raw counts per country/year).
 * **Processed File:** `cleaned_population_final.csv` (Enriched with gender splits, growth metrics, and continental grouping).
+The primary data source for this project is Our World in Data, which provides reliable and publicly accessible datasets on global demographic statistics. The population growth data used in the visualization includes historical records of total population by country over multiple years. These datasets are compiled from internationally recognized sources such as the United Nations, particularly the UN World Population Prospects database. This ensures that the population figures are standardized, consistently updated, and comparable across countries. The dataset includes yearly population estimates for countries such as China, India, and United States, allowing analysis of long-term population trends.
+In addition to total population growth, the project will integrate gender-specific population data from the same platform. Our World in Data provides datasets that break down population statistics by gender, including the number of males and females in each country over time. These datasets are also largely derived from the United Nations demographic databases, which collect and estimate population statistics reported by national statistical agencies worldwide. By combining overall population growth data with gender-disaggregated population data, the project can analyse how male and female populations change at different rates across countries and over time. This integration allows deeper insights into demographic patterns such as gender imbalance, aging populations, and variations in population growth across regions.
+
 
 ### Technical Stack
 * **Language:** R (via RStudio)
