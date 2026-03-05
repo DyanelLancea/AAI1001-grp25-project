@@ -159,22 +159,21 @@ head(continent_summary)
 write_csv(cleaned_population, "data/cleaned_population_final.csv")
 ```
 ## 1. Background
-*Define the context and the problem you are solving.*
+*Show and explain the chosen visualization example, and the story to tell.*
+*List out strengths and weaknesses of the original visualization, with discussion.*
 
-In this section, provide a brief overview of the Fintech domain you are targeting (e.g., Blockchain, Personal Finance, or Regulatory Tech). 
-
-* **Problem Statement:** What is the specific friction point? 
-* **Motivation:** Why is this problem significant for the Singaporean or global market? 
-* **Target Audience:** Who will benefit from this solution?
+**Chosen Visualisation example:** What is the specific friction point? 
+**Story to tell:** xx
+**strengths and weaknesses:** xx
 
 ## 2. Proposal
 *Describe your solution and high-level architecture.*
 
 Detail the application or system you intend to build. 
 
-* **Solution Overview:** How does your app solve the problem?
-* **Core Functionalities:** List 3-4 key features.
-* **Technical Stack:** Mention your use of Python, R, or Java. 
+**Propose improvements :** xx
+**Details on the data sources you plan to use.:** xx
+**Technical Stack:** xx
 
 ```{mermaid}
 graph LR
