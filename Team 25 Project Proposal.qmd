@@ -173,14 +173,6 @@ Detail the application or system you intend to build.
 
 **Propose improvements :** xx
 **Details on the data sources you plan to use.:** xx
-**Technical Stack:** xx
-
-```{mermaid}
-graph LR
-    A[User Input] --> B{Fintech Engine}
-    B --> C[Blockchain/API Layer]
-    C --> D[Result/Visualization]
-```
-
+**Technical Stack:** xx 
 
 
