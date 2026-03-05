@@ -156,7 +156,7 @@ work_dist_final <- data.frame(
   Task = c("Project Background", "Original Analysis", "Design Proposal", 
            "Data Engineering — Cleaning", "Data Engineering — Transformation", 
            "Improved Visualisation", "Technical Integration", "Conclusion"),
-  Allocation = c("Lance", "Joash", "Everyone", "Everyone", "Izwan", "Tanvi", "Wei Hao", "Everyone"), 
+  Allocation = c("Lancea", "Joash", "Everyone", "Everyone", "Izwan", "Tanvi", "Wei Hao", "Everyone"), 
   Responsibility = c(
     "Describe project topic, objectives, and original context.",
     "Combined analysis of original design and effectiveness.",
