@@ -23,6 +23,7 @@ format:
 
 ### Chosen Visualization 
 ![World Population Cartogram by Our World in Data](population_cartogram.jpg)
+[(Link)](https://ourworldindata.org/population-growth)
 
 **Context:**
 The chosen visualization is a **World Population Cartogram** created by *Our World in Data*. In this visualization, each small square represents 500,000 people (based on 2018 data). Unlike standard geographic maps which scale based on land mass, this map distorts the geometry of countries relative to their total population size.
@@ -60,19 +61,72 @@ We have transformed the original `population.csv` into a robust dataset `clean_p
 | **Derived Metrics** | Calculated `Growth` (Absolute) and `Growth_Percentage`. | Raw numbers don't tell the whole story. Relative growth percentages allow for fair comparisons between small emerging nations and large developed ones. |
 | **Categorization** | Added `Continent` column. | The original data listed entities flatly. Grouping by continent enables high-level aggregation and color-coding to reduce visual noise. |
 
+### Proposed Visualization Improvements & Justifications
+
+To address the weaknesses of the original static cartogram (visual clutter, weak colour encoding, and lack of temporal context), we plan to implement **two key improved visualizations** on top of the engineered dataset:
+
+1. **Global Gender-Imbalance Choropleth Map**
+   - **Design:** A world choropleth where each country is shaded based on its gender imbalance (e.g., male–female difference as a proportion of total population). We will use a **diverging colour scale centered at “balanced”**: countries with more females will be shown in shades of **pink**, countries with more males in shades of **blue**, and **white** will represent a near-balanced population. Darker shades indicate larger imbalances, while lighter shades indicate smaller deviations from balance.
+   - **Improvement over original:** Instead of colours merely separating neighbouring countries, colour now directly encodes a **meaningful demographic variable (gender imbalance)**. The map also reduces **visual clutter** by aggregating to country polygons instead of small squares, making it easier to compare regions at a glance. This design makes it immediately clear **where** gender imbalances are strongest and whether they favour males or females, which is information not visible in the original cartogram.
+   - **Justification:** This visualization links directly to our enriched dataset with `Male_Population` and `Female_Population`. By using a single, interpretable colour scale and intensity, we highlight demographic structure rather than just population size. It also supports storytelling about the **geography of gender imbalance**, something the original visualization does not capture.
+
+2. **Temporal Line Chart of Gender Imbalance for Selected Countries/Continents**
+   - **Design:** A time-series line chart where the y-axis shows **average gender imbalance** (e.g., male–female ratio or difference) and the x-axis shows **year**. To avoid a “spaghetti plot”, we will focus on a curated subset: for example, the **top 5 male-dominant countries** and **top 5 female-dominant countries** (by average imbalance over a chosen period), or the **continental averages**. Each line will be clearly labelled, with separate colours or line types distinguishing male-dominant vs female-dominant groups.
+   - **Improvement over original:** This visualization directly addresses the **temporal stagnation** of the original cartogram by showing how gender imbalance **evolves over time**, not just at a single point. Because we limit the number of lines to a small, interpretable set, we reduce clutter while still capturing contrasting patterns between different regions or countries.
+   - **Justification:** The line chart leverages our `Growth` and gender-specific variables to go beyond static totals and reveal **dynamics**: whether gender imbalance is widening, narrowing, or stable. This supports our intended story about **evolution and composition** of populations and allows viewers to compare demographic trajectories across regions without overwhelming them with too many series.
+
+Together, these two improved visualizations complement the original population-focused cartogram by shifting the emphasis from “where people live” to **how demographic structures differ across space and change over time**, while directly tackling the identified issues of colour encoding, clutter, and lack of interactivity/temporal insight.
+
+
 ### Data Sources
-* **Original Source:** *Our World in Data* (https://ourworldindata.org/population-growth).
-* **Input File:** `population.csv` (Raw counts per country/year). 
+* **Original Source:** *World Population Cartogram by Our World in Data* [(Link)](https://ourworldindata.org/population-growth).
+* **Input File:** `population.csv` (Raw counts per country/year). This file is downloaded from the same Our World in Data page, which links to the underlying **United Nations World Population Prospects** data explorer. In that interface, we can select different **indicators** (e.g., total population, growth rate), **sex** (both sexes, female, male), and **age groups** before exporting the data.
 * **Processed File:** `cleaned_population_final.csv` (Enriched with gender splits, growth metrics, and continental grouping).
+  
 The primary data source for this project is Our World in Data, which provides reliable and publicly accessible datasets on global demographic statistics. The population growth data used in the visualization includes historical records of total population by country over multiple years. These datasets are compiled from internationally recognized sources such as the United Nations, particularly the UN World Population Prospects database. This ensures that the population figures are standardized, consistently updated, and comparable across countries. The dataset includes yearly population estimates for countries such as China, India, and United States, allowing analysis of long-term population trends.
+
 In addition to total population growth, the project will integrate gender-specific population data from the same platform. Our World in Data provides datasets that break down population statistics by gender, including the number of males and females in each country over time. These datasets are also largely derived from the United Nations demographic databases, which collect and estimate population statistics reported by national statistical agencies worldwide. By combining overall population growth data with gender-disaggregated population data, the project can analyse how male and female populations change at different rates across countries and over time. This integration allows deeper insights into demographic patterns such as gender imbalance, aging populations, and variations in population growth across regions.
 
 
-### Proposed Visualizations
-* **Language:** R (via RStudio)
-* **Documentation:** Quarto (`.qmd`) for reproducible reporting.
-* **Data Manipulation:** `tidyverse` (dplyr, tidyr) for cleaning and feature engineering.
-* **Visualization:**
-    * `ggplot2`: For static base layers.
-    * `gganimate` / `plotly`: To transform static charts into time-series animations, addressing the "static" weakness of the original example.
-    * `scales`: For formatting large population numbers (e.g., converting 1,000,000 to "1M").
+### Detailed Workflow
+
+Our data engineering workflow transforms the original raw CSVs into a single, tidy, visualization-ready table:
+
+1. **Ingest raw population files**
+   - We download country-level population data from the Our World in Data / UN World Population Prospects explorer, exporting:
+     - `population.csv` for **total population** (both sexes combined).
+     - `male-population.csv` for **male-only population** using the same countries, years, and indicator settings.
+   - In R, we load both files using `readr::read_csv()` and store them as `population` and `male`.
+
+2. **Join total and male population**
+   - We perform a **left join** on `Entity`, `Code`, and `Year` so that each row contains both total and male population for the same country–year combination.
+   - After joining, we **standardize column names**, renaming the ambiguous `all years` variables to:
+     - `Population` (total population),
+     - `Male_Population` (male population).
+
+3. **Handle missing values and invalid rows**
+   - We check for missing values by computing column-wise `NA` counts before and after cleaning.
+   - Rows with missing country codes (`Code`) are removed, since they usually correspond to aggregates or entities that are not needed for country-level analysis.
+   - We confirm that no duplicated `(Entity, Code, Year)` combinations remain.
+
+4. **Derive female population and validate gender splits**
+   - We compute `Female_Population` as `Population - Male_Population`.
+   - As a quality check, we flag any rows where `Population` differs from `Male_Population + Female_Population` by more than a small tolerance, and verify that there are no negative values in any of the three population columns.
+
+5. **Ensure correct year type and coverage**
+   - We convert `Year` to integer to support time-series analysis.
+   - For each country, we summarise the **minimum year**, **maximum year**, and **number of observations** to check that coverage is consistent (e.g., 1950–2023) and identify any gaps or anomalies.
+
+6. **Create growth metrics**
+   - Within each country, we sort the data by year and compute:
+     - `Growth` = change in total population compared with the previous year.
+     - `Growth_Percentage` = year-on-year percentage growth.
+   - These derived metrics allow us to compare growth patterns across countries with very different base population sizes.
+
+7. **Add continent information**
+   - Using the `countrycode` package, we map each `Entity` to a `Continent` (e.g., Asia, Europe, Africa).
+   - We inspect any entities that do not automatically match a continent and ensure that, for our analysis, all relevant countries are successfully assigned.
+
+8. **Export visualization-ready dataset**
+   - Finally, we save the cleaned and enriched table as `cleaned_population_final.csv`.
+   - This file contains, for each country–year: `Entity`, `Code`, `Year`, `Population`, `Male_Population`, `Female_Population`, `Growth`, `Growth_Percentage`, and `Continent`. It serves as the single, reproducible input for our improved visualizations (choropleth map and temporal line chart).
