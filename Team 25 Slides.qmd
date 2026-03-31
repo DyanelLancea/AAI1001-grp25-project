@@ -45,33 +45,32 @@ library(knitr)
 - [Conclusion - Tanvi](#conclusion)
 
 ## Orignal Data Visualization - Joash{#original-viz}
+![](population_cartogram.jpg){width="100%" fig-align="center"}
 
-:::: columns
-:::: {.column width="60%"}
-![](population_cartogram.jpg){width="100%"}
-::::
+::: {style="font-size: 0.75em; margin-top: 8px;"}
+::: columns
+::: {.column width="50%"}
+- 🗺️ **Visual clutter** — Densely packed regions (e.g. Europe) are unreadable, small nations are reduced to a few insignificant pixels
+- 📦 **Static snapshot** — Frozen in 2018, offers 0 temporal context
+- 🎨 **Wasted visual channel** — Color is used only to distinguish borders
+:::
+::: {.column width="50%"}
+- 🕐 **No interactivity** — No ability to zoom, filter, or obtain precise data
+- ⚧ **Lack of dimensionality** — Treats population as a single, generic aggregate
+:::
+:::
+:::
 
-:::: {.column width="40%"}
-**"All the People in the World" — Our World in Data (2018)**
-
-**Weaknesses:**
-
-- 🕐 **Static** — frozen at 2018, no temporal view
-- 🎨 **Color = continent only** — no meaningful data encoding
-- ⚧ **No gender dimension** — treats population as one number
-- 🗺️ **Visual clutter** — dense regions like Europe are unreadable
-::::
-::::
-
----
-
-## Critiques and Proposed Improvements - Joash{#critiques}
-
+## Proposed Improvements - Joash{#critiques}
 <hr>
 
-:::: {.callout-note}
-Connect the weaknesses in the original visualization to concrete improvement goals (what should become easier to see/compare/explain).
-::::
+::: {style="line-height: 2.4;"}
+- 🌍 **Interactive choropleth map** — Uses familiar geography boundaries, and reduces clutter
+- 📅 **Year slider (1950–2023)** — Integrated slider that reveals evolution of population over time
+- 🎨 **Diverging colour scale** — Pink = more female, Blue = more male, making gender imbalance immediately visible
+- 🌐 **Data on demand UI** — Continent filters and hover tooltips to reduce visual overload
+- ⚧ **Gender Imbalance Index** — Custom metric that quantifies male/female deviation per country
+:::
 
 ## Data Selection and Sources - Izwan{#data-selection}
 
