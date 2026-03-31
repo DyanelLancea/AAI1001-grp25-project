@@ -1,4 +1,14 @@
 ---
+title: Project Presentation
+subtitle: AAI1001, Team 25 -- Data Engineering and Visualization
+author:
+  - "Balandra Dyanel Lancea Estillore, 2502025"
+  - "Abburu Sai Tanvi, 2503638"
+  - "Joash Tan Ee, 2501571"
+  - "Soh Wei Hao, 2502369"
+  - "Muhammad Izwan Bin Azman, 2503488"
+date-format: "dddd MMM DD, YYYY"
+engine: knitr
 format:
   revealjs:
     self-contained: true
@@ -7,11 +17,94 @@ format:
     width: 1600
     height: 900
     margin: 0.05
+    min-scale: 0.2
+    max-scale: 2.0
     scrollable: true
     slide-number: true
+    preview-links: false
+    incremental: true
+    code-block-height: 700px
 ---
 
-## Original Visualization
+```{r}
+#| label: setup
+#| include: false
+library(knitr)
+```
+
+```{css, echo=FALSE}
+/* for code chunk */
+code.sourceCode {
+  font-size: 1.3em;
+}
+
+/* for R output */
+.reveal .cell-output-stdout {
+  font-size: 1.3em;
+}
+
+/* title slide: move author list to a neat corner block */
+.reveal .title-slide {
+  position: relative;
+}
+
+.reveal .title-slide .quarto-title-authors {
+  position: absolute;
+  right: 36px;
+  bottom: 30px;
+  max-width: 520px;
+  text-align: right;
+  line-height: 1.25;
+  font-size: 0.7em;
+}
+
+.reveal .title-slide .quarto-title-authors .quarto-title-author {
+  display: block;
+  margin: 0 0 8px 0;
+}
+
+.reveal .title-slide .quarto-title-authors .quarto-title-author:last-child {
+  margin-bottom: 0;
+}
+
+.reveal .title-slide .quarto-title-authors p {
+  margin: 0;
+}
+
+.reveal .title-slide .quarto-title-authors .quarto-title-affiliation {
+  display: none;
+}
+```
+
+## Agenda {.unnumbered #agenda}
+
+<hr>
+
+- [Orignal Data Visualization - Joash](#original-viz)
+- [Critiques and Proposed Improvements - Joash](#critiques)
+- [Data Selection and Sources - Izwan](#data-selection)
+- [Data Engineering Workflow (from raw data to visualization-ready data) - Lancea](#workflow)
+- [Improved Visualization (corresponding to proposed improvements) - Wei Hao](#improved-viz)
+- [Insights and Analysis - Tanvi](#insights)
+- [Conclusion - Tanvi](#conclusion)
+
+## Data Selection and Sources {#data-selection}
+
+<hr>
+
+::: {.callout-note}
+Summarize the dataset used, where it came from, and any key caveats (coverage, time range, missingness, definitions).
+:::
+
+## Data Engineering Workflow (from raw data to visualization-ready data) {#workflow}
+
+<hr>
+
+::: {.callout-note}
+Outline your pipeline from raw files → cleaning/transformations → final dataset used for visualization (and where the cleaned file is saved).
+:::
+
+## Orignal Data Visualization {#original-viz}
 
 ::: columns
 ::: {.column width="60%"}
@@ -32,7 +125,15 @@ format:
 
 ---
 
-## Improved Visualization
+## Critiques and Proposed Improvements {#critiques}
+
+<hr>
+
+::: {.callout-note}
+Connect the weaknesses in the original visualization to concrete improvement goals (what should become easier to see/compare/explain).
+:::
+
+## Improved Visualization (corresponding to proposed improvements) {#improved-viz}
 
 ::: columns
 ::: {.column width="30%"}
@@ -228,3 +329,19 @@ fig
 ```
 :::
 :::
+
+## Insights and Analysis {#insights}
+
+<hr>
+
+::: {.callout-note}
+Summarize 2–4 key insights the improved visualization reveals. Prefer short, data-backed statements.
+:::
+
+## Conclusion {#conclusion}
+
+<hr>
+
+- Recap the main improvement(s) and why they matter
+- Highlight the most important insight
+- Mention one limitation and one next step
