@@ -1,23 +1,64 @@
 ---
 format:
-  html:
+  revealjs:
     self-contained: true
     embed-resources: true
+    theme: default
+    width: 1600
+    height: 900
+    margin: 0.05
+    scrollable: true
+    slide-number: true
 ---
+
+## Original Visualization
+
+::: columns
+::: {.column width="60%"}
+![](population_cartogram.jpg){width="100%"}
+:::
+
+::: {.column width="40%"}
+**"All the People in the World" — Our World in Data (2018)**
+
+**Weaknesses:**
+
+- 🕐 **Static** — frozen at 2018, no temporal view
+- 🎨 **Color = continent only** — no meaningful data encoding
+- ⚧ **No gender dimension** — treats population as one number
+- 🗺️ **Visual clutter** — dense regions like Europe are unreadable
+:::
+:::
+
+---
+
+## Improved Visualization
+
+::: columns
+::: {.column width="30%"}
+**What we changed:**
+
+- 🎨 **Diverging color scale** — pink = more female, blue = more male, white = balanced
+- 📅 **Year slider** — explore 1950 to 2023
+- 🌍 **Continent filter** — isolate any region
+- 🖱️ **Hover tooltips** — full country details on demand
+- 📊 **Gender imbalance index** — quantified and visualized per country
+:::
+
+::: {.column width="70%"}
 ```{r}
 #| echo: false
 #| warning: false
 #| message: false
+
 library(plotly)
 library(dplyr)
 library(readr)
 library(scales)
 library(countrycode)
 
-# Read data
 cleaned_population_with_growth <- read_csv("data/cleaned_population_with_growth.csv", show_col_types = FALSE)
 
-# Add continent column
 cleaned_population_final <- cleaned_population_with_growth %>%
   mutate(
     Continent = countrycode(sourcevar = Entity,
@@ -26,7 +67,6 @@ cleaned_population_final <- cleaned_population_with_growth %>%
     Continent = recode(Continent, "Americas" = "America")
   )
 
-# Calculate gender imbalance index
 map_data <- cleaned_population_final %>%
   filter(!is.na(Code), !is.na(Continent)) %>%
   mutate(
@@ -37,11 +77,8 @@ map_data <- cleaned_population_final %>%
 
 continents <- sort(unique(map_data$Continent))
 all_years <- sort(unique(map_data$Year))
-
-# Initial year data (most recent year)
 yr_data_init <- map_data %>% filter(Year == max(all_years))
 
-# Build continent buttons
 continent_buttons <- lapply(c("All", continents), function(cont) {
   if (cont == "All") {
     z_vals <- yr_data_init$Imbalance_Index
@@ -59,7 +96,6 @@ continent_buttons <- lapply(c("All", continents), function(cont) {
   )
 })
 
-# Build animation frames
 frames <- lapply(all_years, function(yr) {
   yr_data <- map_data %>% filter(Year == yr)
   list(
@@ -82,7 +118,6 @@ frames <- lapply(all_years, function(yr) {
   )
 })
 
-# Build slider steps
 slider_steps <- lapply(all_years, function(yr) {
   list(
     args = list(
@@ -98,7 +133,6 @@ slider_steps <- lapply(all_years, function(yr) {
   )
 })
 
-# Build plot
 fig <- plot_ly(
   data = yr_data_init,
   type = "choropleth",
@@ -134,7 +168,7 @@ fig <- plot_ly(
   layout(
     title = list(
       text = "Global Gender Imbalance Over Time (1950–2023)",
-      font = list(size = 20)
+      font = list(size = 16)
     ),
     geo = list(
       showframe = FALSE,
@@ -153,7 +187,7 @@ fig <- plot_ly(
         bgcolor = "#ffffff",
         bordercolor = "#cccccc",
         borderwidth = 1,
-        font = list(size = 12),
+        font = list(size = 11),
         buttons = continent_buttons
       )
     ),
@@ -168,7 +202,7 @@ fig <- plot_ly(
           prefix = "Year: ",
           visible = TRUE,
           xanchor = "center",
-          font = list(size = 14)
+          font = list(size = 13)
         ),
         transition = list(duration = 100),
         pad = list(t = 30)
@@ -182,15 +216,15 @@ fig <- plot_ly(
         xref = "paper",
         yref = "paper",
         showarrow = FALSE,
-        font = list(size = 12),
+        font = list(size = 11),
         xanchor = "left"
       )
     ),
-    margin = list(l = 10, r = 160, t = 60, b = 100)
+    margin = list(l = 10, r = 160, t = 50, b = 100)
   )
 
-# Add frames
 fig$x$frames <- frames
-
 fig
 ```
+:::
+:::
