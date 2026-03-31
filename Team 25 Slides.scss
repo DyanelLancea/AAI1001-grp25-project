@@ -1,29 +1,198 @@
+/*-- scss:defaults --*/
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+$presentation-font-size-root: 34px !default;
+$presentation-line-height: 1.35 !default;
+
+$font-family-sans-serif: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif !default;
+$font-family-monospace: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !default;
+
+$presentation-heading-font: "Fraunces", Georgia, serif !default;
+$presentation-heading-font-weight: 700 !default;
+$presentation-heading-text-shadow: none !default;
+
+$body-bg: #0b1020 !default;
+$body-color: #eef2ff !default;
+$link-color: #7dd3fc !default;
+$selection-bg: rgba(125, 211, 252, 0.35) !default;
+
+/* accent palette */
+$t25-ink: #0b1020;
+$t25-surface: rgba(255, 255, 255, 0.06);
+$t25-surface-2: rgba(255, 255, 255, 0.10);
+$t25-border: rgba(255, 255, 255, 0.14);
+$t25-accent: #7dd3fc;
+$t25-accent-2: #a78bfa;
+$t25-warn: #fbbf24;
+$t25-good: #34d399;
+
 /*-- scss:rules --*/
-/* Team 25 RevealJS theme tweaks for Quarto */
 
-/* for code chunk */
+/* Base */
+.reveal {
+  font-family: $font-family-sans-serif;
+}
+
+.reveal .slides {
+  text-rendering: geometricPrecision;
+}
+
+.reveal ::selection {
+  background: $selection-bg;
+}
+
+/* Subtle background texture */
+.reveal .slides::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 800px at 15% 10%, rgba(125, 211, 252, 0.18), transparent 55%),
+    radial-gradient(900px 600px at 85% 20%, rgba(167, 139, 250, 0.14), transparent 55%),
+    radial-gradient(700px 500px at 55% 90%, rgba(52, 211, 153, 0.10), transparent 55%);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+/* Headings */
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  letter-spacing: -0.015em;
+}
+
+.reveal h1 {
+  font-weight: 700;
+}
+
+.reveal h2 {
+  font-weight: 700;
+  margin-bottom: 0.35em;
+}
+
+.reveal h2::after {
+  content: "";
+  display: block;
+  height: 4px;
+  width: 72px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, $t25-accent, $t25-accent-2);
+  opacity: 0.85;
+}
+
+.reveal h3 {
+  font-weight: 650;
+  opacity: 0.95;
+}
+
+/* Links */
+.reveal a {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.reveal a:hover {
+  filter: brightness(1.08);
+}
+
+/* Horizontal rule used under titles */
+.reveal hr {
+  border: 0;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.0));
+  margin: 18px 0 22px 0;
+}
+
+/* Lists: cleaner spacing */
+.reveal ul,
+.reveal ol {
+  margin-top: 0.25em;
+}
+
+.reveal li {
+  margin: 0.25em 0;
+}
+
+/* Code: slightly larger + nicer container */
+code,
+pre code {
+  font-family: $font-family-monospace;
+}
+
 code.sourceCode {
-  font-size: 1.3em;
+  font-size: 1.15em;
 }
 
-/* for R output */
-.reveal .cell-output-stdout {
-  font-size: 1.3em;
+.reveal pre {
+  border-radius: 14px;
+  border: 1px solid $t25-border;
+  background: rgba(15, 23, 42, 0.04);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.10);
 }
 
-/* title slide: move author list to a neat corner block */
+.reveal pre code {
+  padding: 18px 20px;
+}
+
+/* Quarto callouts: make them look like slide “cards” */
+.reveal div.callout {
+  border-radius: 16px;
+  border: 1px solid $t25-border;
+  background: $t25-surface;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.10);
+}
+
+.reveal div.callout .callout-header {
+  border-bottom: 1px solid $t25-border;
+  background: rgba(15, 23, 42, 0.03);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.reveal div.callout .callout-title-container {
+  font-weight: 700;
+}
+
+.reveal div.callout-note {
+  border-left: 6px solid $t25-accent;
+}
+
+.reveal div.callout-warning {
+  border-left: 6px solid $t25-warn;
+}
+
+.reveal div.callout-tip {
+  border-left: 6px solid $t25-good;
+}
+
+/* Title slide: compact names block */
 .reveal .title-slide {
   position: relative;
 }
 
+.reveal .title-slide h1 {
+  font-family: $presentation-heading-font;
+}
+
+.reveal .title-slide .subtitle {
+  opacity: 0.95;
+}
+
 .reveal .title-slide .quarto-title-authors {
   position: absolute;
-  right: 36px;
-  bottom: 30px;
-  max-width: 520px;
+  right: 42px;
+  bottom: 34px;
+  max-width: 560px;
   text-align: right;
   line-height: 1.25;
-  font-size: 0.7em;
+  font-size: 0.72em;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid $t25-border;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
 }
 
 .reveal .title-slide .quarto-title-authors .quarto-title-author {
@@ -41,4 +210,59 @@ code.sourceCode {
 
 .reveal .title-slide .quarto-title-authors .quarto-title-affiliation {
   display: none;
+}
+
+/* Agenda slide: make links look like a neat menu */
+section#agenda ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 12px;
+}
+
+section#agenda li {
+  margin: 10px 0;
+}
+
+section#agenda a {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid $t25-border;
+  background: $t25-surface-2;
+  text-decoration: none;
+}
+
+section#agenda a:hover {
+  transform: translateY(-1px);
+  transition: transform 120ms ease, filter 120ms ease;
+  filter: brightness(1.08);
+}
+
+/* Tables (if any): improve readability */
+.reveal table {
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid $t25-border;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.reveal table th {
+  background: rgba(15, 23, 42, 0.04);
+  font-weight: 700;
+}
+
+.reveal table th,
+.reveal table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+/* Speaker notes indicator + slide numbers: soften */
+.reveal .slide-number {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid $t25-border;
+  border-radius: 999px;
+  padding: 6px 10px;
 }
