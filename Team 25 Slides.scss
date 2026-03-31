@@ -1,0 +1,44 @@
+/*-- scss:rules --*/
+/* Team 25 RevealJS theme tweaks for Quarto */
+
+/* for code chunk */
+code.sourceCode {
+  font-size: 1.3em;
+}
+
+/* for R output */
+.reveal .cell-output-stdout {
+  font-size: 1.3em;
+}
+
+/* title slide: move author list to a neat corner block */
+.reveal .title-slide {
+  position: relative;
+}
+
+.reveal .title-slide .quarto-title-authors {
+  position: absolute;
+  right: 36px;
+  bottom: 30px;
+  max-width: 520px;
+  text-align: right;
+  line-height: 1.25;
+  font-size: 0.7em;
+}
+
+.reveal .title-slide .quarto-title-authors .quarto-title-author {
+  display: block;
+  margin: 0 0 8px 0;
+}
+
+.reveal .title-slide .quarto-title-authors .quarto-title-author:last-child {
+  margin-bottom: 0;
+}
+
+.reveal .title-slide .quarto-title-authors p {
+  margin: 0;
+}
+
+.reveal .title-slide .quarto-title-authors .quarto-title-affiliation {
+  display: none;
+}
