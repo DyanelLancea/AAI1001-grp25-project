@@ -85,9 +85,40 @@ Summarize the dataset used, where it came from, and any key caveats (coverage, t
 
 <hr>
 
+::::: columns
+::::: {.column width="42%"}
 ::: {.callout-note}
-Outline your pipeline from raw files → cleaning/transformations → final dataset used for visualization (and where the cleaned file is saved).
+**Inputs**
+
+- `data/population.csv` (total)
+- `data/male-population.csv` (male)
+
+**Output (used in viz)**
+
+- `data/cleaned_population_with_growth.csv`
+
+**Viz-only derivations**
+
+- `Continent` (via `countrycode`)
+- **Imbalance Index** \(=\frac{Male - Female}{Total}\times 100\)
 :::
+:::::
+
+::::: {.column width="58%"}
+::: {.callout-note}
+**Pipeline (raw → visualization-ready)**
+
+1) **Align keys**: `Entity`, `Code` (ISO-3), `Year`  
+2) **Join** total + male on the keys  
+3) **Derive female**: `Female_Population = Population - Male_Population`  
+4) **Filter** unmappable rows (missing `Code`)  
+5) **Growth (per country)**:
+   - `Growth_Absolute = Population - lag(Population)`
+   - `Growth_Pct = (Growth_Absolute / lag(Population)) * 100`
+:::
+:::::
+:::::
+
 
 ## Improved Visualization (corresponding to proposed improvements) - Wei Hao{#improved-viz}
 

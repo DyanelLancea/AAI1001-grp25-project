@@ -144,11 +144,18 @@ code.sourceCode {
   box-shadow: 0 12px 26px rgba(15, 23, 42, 0.10);
 }
 
-.reveal div.callout .callout-header {
-  border-bottom: 1px solid $t25-border;
-  background: rgba(15, 23, 42, 0.03);
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
+/* Quarto callout label row ("Note" + icon).
+   In reveal self-contained builds, Quarto’s generated CSS can win unless we
+   increase specificity + use !important. */
+.reveal .slides section div.callout .callout-header,
+.reveal .slides section div.callout .callout-title,
+.reveal .slides section div.callout .callout-icon-container {
+  display: none !important;
+}
+
+/* Remove the extra top spacing that the (now hidden) title row used. */
+.reveal .slides section div.callout.callout-titled > .callout-body {
+  padding-top: 0.9rem;
 }
 
 .reveal div.callout .callout-title-container {
