@@ -360,6 +360,7 @@ fig
 - 🔎 **Easy to validate**: hover tooltips show country-year totals and shares for quick cross-checking.
 :::::
 :::::
+---
 
 ## Conclusion - Tanvi{#conclusion}
 
