@@ -319,17 +319,6 @@ fig
 - ⏱️ **Time matters**: imbalance is not fixed—some countries/regions move toward balance while others diverge in specific periods.
 - 🌍 **Regional structure emerges**: continent filtering reduces clutter and makes within-region comparison more reliable.
 - 🔎 **Outliers are easy to verify**: hover tooltips provide country–year totals and percentages for quick cross-checking and case selection.
-
-<br>
-
-### Quick analysis guide 
-
-| ✅ What to check | 🔎 How it appears on the map | 💡 Why it matters |
-|---|---|---|
-| Stability vs change | Countries fading toward white or intensifying in color as you move the year slider | Shows whether imbalance is persistent or period-specific |
-| Regional clustering | Groups of similarly colored countries within a continent filter | Suggests shared demographic or socio-economic drivers |
-| Outliers | A few countries with consistently deep blue/pink | Prioritizes cases for deeper investigation |
-| Scale awareness | Small differences near white vs strong extremes | Prevents over-interpreting minor deviations from balance |
 :::::
 :::::
 
@@ -347,6 +336,3 @@ fig
 
 - ⚠️ **Limitation**  
   Country-level totals can mask **age structure** and **subnational variation**, and the visualization is descriptive—it does not attribute causes.
-
-- 🧩 **Next step**  
-  Add an **outliers panel** (top/bottom imbalance for the selected year + trend-on-click) and enrich with context variables (migration, conflict, policy) to strengthen interpretation.
