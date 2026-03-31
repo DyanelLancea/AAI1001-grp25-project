@@ -302,14 +302,51 @@ fig
 
 <hr>
 
-::: {.callout-note}
-Summarize 2–4 key insights the improved visualization reveals. Prefer short, data-backed statements.
-:::
+::::: columns
+::::: {.column width="38%"}
+### What the map shows
+
+- 📌 **Metric**: Gender Imbalance Index (GII) = (Male − Female) / Total × 100
+- 🧮 **Interpretation**: + male-heavy, − female-heavy, 0 balanced
+- 🎨 **Encoding**: diverging scale centered at 0 (white)
+- 🧭 **Interaction**: year slider (1950–2023) + continent filter + hover tooltips
+:::::
+
+::::: {.column width="62%"}
+### Key insights from the improved visualization
+
+- ✅ **Near-balance is the norm**: most countries remain close to 0 across the timeline; large deviations are concentrated in a smaller set of outliers.
+- ⏱️ **Time matters**: imbalance is not fixed—some countries/regions move toward balance while others diverge in specific periods.
+- 🌍 **Regional structure emerges**: continent filtering reduces clutter and makes within-region comparison more reliable.
+- 🔎 **Outliers are easy to verify**: hover tooltips provide country–year totals and percentages for quick cross-checking and case selection.
+
+<br>
+
+### Quick analysis guide 
+
+| ✅ What to check | 🔎 How it appears on the map | 💡 Why it matters |
+|---|---|---|
+| Stability vs change | Countries fading toward white or intensifying in color as you move the year slider | Shows whether imbalance is persistent or period-specific |
+| Regional clustering | Groups of similarly colored countries within a continent filter | Suggests shared demographic or socio-economic drivers |
+| Outliers | A few countries with consistently deep blue/pink | Prioritizes cases for deeper investigation |
+| Scale awareness | Small differences near white vs strong extremes | Prevents over-interpreting minor deviations from balance |
+:::::
+:::::
 
 ## Conclusion - Tanvi{#conclusion}
 
 <hr>
 
-- Recap the main improvement(s) and why they matter
-- Highlight the most important insight
-- Mention one limitation and one next step
+### Conclusion
+
+- 🚀 **What we improved**  
+  We replaced a **static 2018 cartogram** with an **interactive, time-aware choropleth** where color encodes one interpretable demographic signal (GII). This makes comparison across countries and years straightforward.
+
+- ⭐ **Most important takeaway**  
+  From 1950–2023, most countries stay close to balance, while a smaller set shows **persistent or period-specific outlier imbalances** that stand out clearly on the diverging scale.
+
+- ⚠️ **Limitation**  
+  Country-level totals can mask **age structure** and **subnational variation**, and the visualization is descriptive—it does not attribute causes.
+
+- 🧩 **Next step**  
+  Add an **outliers panel** (top/bottom imbalance for the selected year + trend-on-click) and enrich with context variables (migration, conflict, policy) to strengthen interpretation.
