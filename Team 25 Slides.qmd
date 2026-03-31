@@ -356,7 +356,7 @@ fig
 
 <hr>
 
-### Conclusion (key points)
+### Conclusion
 
 - 🚀 **What we improved**  
   We replaced a **static 2018 cartogram** with an **interactive, time-aware choropleth** where color encodes one interpretable demographic signal (GII). This makes comparison across countries and years straightforward.
