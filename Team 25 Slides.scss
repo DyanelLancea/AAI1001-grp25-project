@@ -121,6 +121,11 @@ pre code {
   font-family: $font-family-monospace;
 }
 
+/* Force readable inline code on dark background */
+.reveal code {
+  color: rgba(238, 242, 255, 0.95);
+}
+
 code.sourceCode {
   font-size: 1.15em;
 }
@@ -128,12 +133,31 @@ code.sourceCode {
 .reveal pre {
   border-radius: 14px;
   border: 1px solid $t25-border;
-  background: rgba(15, 23, 42, 0.04);
+  /* Darker panel so code is visible */
+  background: rgba(15, 23, 42, 0.72);
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.10);
 }
 
 .reveal pre code {
   padding: 18px 20px;
+  color: rgba(238, 242, 255, 0.95);
+}
+
+/* Quarto syntax highlighting can style token spans dark.
+   Force all code tokens to be readable on our dark theme. */
+.reveal pre code,
+.reveal pre code *,
+.reveal code.sourceCode,
+.reveal code.sourceCode *,
+.reveal pre code.sourceCode,
+.reveal pre code.sourceCode * {
+  color: rgba(238, 242, 255, 0.95) !important;
+}
+
+/* If highlight.js classes are present, ensure background stays dark. */
+.reveal pre code.hljs,
+.reveal pre code.hljs * {
+  color: rgba(238, 242, 255, 0.95) !important;
 }
 
 /* Quarto callouts: make them look like slide “cards” */
