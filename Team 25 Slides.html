@@ -1106,27 +1106,76 @@ Muhammad Izwan Bin Azman, 2503488
 <section id="insights" class="slide level2">
 <h2>Insights and Analysis - Tanvi</h2>
 <hr>
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Note</strong></p>
-</div>
-<div class="callout-content">
-<p>Summarize 2–4 key insights the improved visualization reveals. Prefer short, data-backed statements.</p>
-</div>
-</div>
-</div>
+<div class="columns">
+<div class="column" style="width:38%;">
+<h3 id="what-the-map-shows">What the map shows</h3>
+<ul>
+<li class="fragment">📌 <strong>Metric</strong>: Gender Imbalance Index (GII) = (Male − Female) / Total × 100</li>
+<li class="fragment">🧮 <strong>Interpretation</strong>: + male-heavy, − female-heavy, 0 balanced</li>
+<li class="fragment">🎨 <strong>Encoding</strong>: diverging scale centered at 0 (white)</li>
+<li class="fragment">🧭 <strong>Interaction</strong>: year slider (1950–2023) + continent filter + hover tooltips</li>
+</ul>
+</div><div class="column" style="width:62%;">
+<h3 id="key-insights-from-the-improved-visualization">Key insights from the improved visualization</h3>
+<ul>
+<li class="fragment">✅ <strong>Near-balance is the norm</strong>: most countries remain close to 0 across the timeline; large deviations are concentrated in a smaller set of outliers.</li>
+<li class="fragment">⏱️ <strong>Time matters</strong>: imbalance is not fixed—some countries/regions move toward balance while others diverge in specific periods.</li>
+<li class="fragment">🌍 <strong>Regional structure emerges</strong>: continent filtering reduces clutter and makes within-region comparison more reliable.</li>
+<li class="fragment">🔎 <strong>Outliers are easy to verify</strong>: hover tooltips provide country–year totals and percentages for quick cross-checking and case selection.</li>
+</ul>
+<p><br></p>
+<h3 id="quick-analysis-guide">Quick analysis guide</h3>
+<table class="caption-top">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>✅ What to check</th>
+<th>🔎 How it appears on the map</th>
+<th>💡 Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Stability vs change</td>
+<td>Countries fading toward white or intensifying in color as you move the year slider</td>
+<td>Shows whether imbalance is persistent or period-specific</td>
+</tr>
+<tr class="even">
+<td>Regional clustering</td>
+<td>Groups of similarly colored countries within a continent filter</td>
+<td>Suggests shared demographic or socio-economic drivers</td>
+</tr>
+<tr class="odd">
+<td>Outliers</td>
+<td>A few countries with consistently deep blue/pink</td>
+<td>Prioritizes cases for deeper investigation</td>
+</tr>
+<tr class="even">
+<td>Scale awareness</td>
+<td>Small differences near white vs strong extremes</td>
+<td>Prevents over-interpreting minor deviations from balance</td>
+</tr>
+</tbody>
+</table>
+</div></div>
 </section>
 <section id="conclusion" class="slide level2">
 <h2>Conclusion - Tanvi</h2>
 <hr>
+<h3 id="conclusion-1">Conclusion</h3>
 <ul>
-<li class="fragment">Recap the main improvement(s) and why they matter</li>
-<li class="fragment">Highlight the most important insight</li>
-<li class="fragment">Mention one limitation and one next step</li>
+<li class="fragment"><p>🚀 <strong>What we improved</strong><br>
+We replaced a <strong>static 2018 cartogram</strong> with an <strong>interactive, time-aware choropleth</strong> where color encodes one interpretable demographic signal (GII). This makes comparison across countries and years straightforward.</p></li>
+<li class="fragment"><p>⭐ <strong>Most important takeaway</strong><br>
+From 1950–2023, most countries stay close to balance, while a smaller set shows <strong>persistent or period-specific outlier imbalances</strong> that stand out clearly on the diverging scale.</p></li>
+<li class="fragment"><p>⚠️ <strong>Limitation</strong><br>
+Country-level totals can mask <strong>age structure</strong> and <strong>subnational variation</strong>, and the visualization is descriptive—it does not attribute causes.</p></li>
+<li class="fragment"><p>🧩 <strong>Next step</strong><br>
+Add an <strong>outliers panel</strong> (top/bottom imbalance for the selected year + trend-on-click) and enrich with context variables (migration, conflict, policy) to strengthen interpretation.</p></li>
 </ul>
 
 </section>
