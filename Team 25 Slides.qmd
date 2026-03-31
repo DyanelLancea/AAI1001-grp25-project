@@ -128,6 +128,78 @@ Summarize the dataset used, where it came from, and any key caveats (coverage, t
 :::::
 
 
+## Appendix: R Code — Data Engineering - Lancea{.unnumbered}
+
+<hr>
+
+::::: columns
+::::: {.column width="52%"}
+### Pipeline
+
+```r
+library(readr); library(dplyr); library(countrycode)
+
+population <- read_csv("data/population.csv",
+                       show_col_types = FALSE)
+male       <- read_csv("data/male-population.csv",
+                       show_col_types = FALSE)
+
+cleaned_population <- population %>%
+  left_join(male, by = c("Entity", "Code", "Year"),
+            suffix = c("_Total", "_Male")) %>%
+  rename(Population      = `all years_Total`,
+         Male_Population = `all years_Male`) %>%
+  filter(!is.na(Code)) %>%          # drop aggregates
+  mutate(
+    Female_Population = Population - Male_Population,
+    Year = as.integer(Year)
+  ) %>%
+  arrange(Entity, Year) %>%
+  group_by(Entity) %>%
+  mutate(
+    Growth            = Population - lag(Population),
+    Growth_Percentage = Growth / lag(Population) * 100
+  ) %>%
+  ungroup() %>%
+  mutate(Continent = countrycode(Entity,
+                                 "country.name",
+                                 "continent"))
+```
+:::::
+
+::::: {.column width="48%"}
+### Validation checks
+
+```r
+# Duplicate country–year keys → 0
+repeated <- cleaned_population %>%
+  count(Entity, Code, Year) %>%
+  filter(n > 1)
+
+# Total ≠ Male + Female → 0
+gender_mismatch <- cleaned_population %>%
+  filter(
+    abs(Population -
+        (Male_Population + Female_Population)) > 1
+  )
+
+# Any negative values → 0
+negative <- cleaned_population %>%
+  filter(Population    < 0 |
+         Male_Population < 0 |
+         Female_Population < 0)
+
+list(
+  count_repeated        = nrow(repeated),        # 0
+  count_gender_mismatch = nrow(gender_mismatch),  # 0
+  count_negative        = nrow(negative)          # 0
+)
+```
+:::::
+:::::
+
+---
+
 ## Improved Visualization (corresponding to proposed improvements) - Wei Hao{#improved-viz}
 
 :::: columns
