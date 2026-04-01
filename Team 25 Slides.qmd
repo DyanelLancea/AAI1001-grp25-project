@@ -39,6 +39,7 @@ library(knitr)
 - [Orignal Data Visualization - Joash](#original-viz)
 - [Critiques and Proposed Improvements - Joash](#critiques)
 - [Data Selection and Sources - Izwan](#data-selection)
+- [From Population Data to Depper Insight - Izwan](#data-improvements)
 - [Data Engineering Workflow (from raw data to visualization-ready data) - Lancea](#workflow)
 - [Improved Visualization (corresponding to proposed improvements) - Wei Hao](#improved-viz)
 - [Demo for Improved Visualization - Wei Hao](#demo-viz)
@@ -77,9 +78,66 @@ library(knitr)
 
 <hr>
 
+:::: columns
+::: {.column width="62%"}
+::: {style="font-size: 0.88em; line-height: 2.5;"}
+
+- 🌐 **Primary source:** We used **Our World in Data – Population Growth**, using the **UN World Population Prospects 2024** series for our project.
+
+- 📚 **Transparent provenance:** The source is easy to justify because its data origin and processing basis are clearly traceable.
+
+- 📁 **Two related datasets:** We used one dataset for **total population** and another for **male population**, both from the same OWID source page.
+
+- 🧱 **Raw structure:** The original total population file contained **4 columns** — **Entity**, **Code**, **Year**, and **All years**, which we later renamed to **Population** for clarity.
+
+:::
+:::
+::: {.column width="38%"}
 :::: {.callout-note}
-Summarize the dataset used, where it came from, and any key caveats (coverage, time range, missingness, definitions).
+### Limitations
+
+- ⚠️ **Historical Scope** — We focused only on **UN-based** period instead of OWID’s longer-run population estimates before 1950.
+- ⚠️ **Aggregate rows** — The raw files include entries such as **World** and **Africa (UN)**, so these were excluded from country-level mapping.
+- ⚠️ **Derived variables** — Female population was calculated from **total population − male population**.
+- ⚠️ **Non-sovereign countries** — The source includes special cases such as **Palestine** and **Vatican**, not only sovereign states.
+
+<br>
+
+**🔗 Source page:**  
+[Our World in Data – Population Growth](https://ourworldindata.org/population-growth)
+::: {style="font-size: 0.78em; margin-top: 10px; line-height: 1.35; opacity: 0.95;"}
+**Citation:** United Nations, *World Population Prospects 2024* — processed by *Our World in Data*
+:::
 ::::
+:::
+::::
+
+::: {style="font-size: 0.58em; margin-top: 10px; line-height: 1.35; opacity: 0.9;"}
+**Source note:** OWID’s long-run population methodology combines **HYDE** for the earliest period, **Gapminder** for **1800–1949**, and **UN World Population Prospects 2024** from **1950 onward**.
+:::
+
+## From Population Data to Deeper Insight - Izwan{#data-improvements}
+
+<hr>
+
+::: {style="font-size: 0.95em; line-height: 2.5;"}
+- 🎯 **Why this visualization was chosen** — The source data had strong potential to be cleaned, enriched, and redesigned into a more insightful visual story.
+- 👥 **Beyond population size** — Total population mainly shows **how many people** there are, but not enough about the **composition of that population**.
+- 🔍 **A more meaningful question** — Instead of only asking which countries are larger, we asked whether populations are **more balanced or more uneven by gender**.
+- 🚀 **Supports our redesign** — This allowed us to move from a simple population dataset to a richer visualization that communicates **pattern, comparison, and insight**, not just magnitude.
+:::
+
+<hr>
+
+::: {style="text-align: center; font-size: 0.78em; margin: 10px 0;"}
+📦 **Raw (4 cols)** → 🔧 Clean → 🔗 Join → 📐 Derive → 🔬 **Enriched (> 6 cols)**
+:::
+
+<hr>
+
+::: {style="font-size: 0.62em; margin-top: 12px; padding: 8px 14px; background-color: rgba(255,255,255,0.04); border-left: 3px solid #5b9bd5; border-radius: 4px; color: #bbb;"}
+💡 Key reveal: Qatar's Gender Imbalance Index of 2.81 means nearly 3 males for every female — invisible in the raw data, but immediately apparent after enrichment.
+:::
 
 ## Data Engineering Workflow (from raw data to visualization-ready data) - Lancea{#workflow}
 
