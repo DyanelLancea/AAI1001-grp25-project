@@ -417,6 +417,9 @@ fig
 #| echo: false
 #| warning: false
 #| message: false
+#| #| #| fig.width: 11
+#| fig.height: 6
+#| out.width: "100%"
 library(plotly)
 library(dplyr)
 library(readr)
