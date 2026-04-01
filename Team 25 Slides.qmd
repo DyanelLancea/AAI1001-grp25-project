@@ -80,6 +80,7 @@ library(knitr)
 
 :::: columns
 ::: {.column width="62%"}
+
 ::: {style="font-size: 0.88em; line-height: 2.5;"}
 
 - 🌐 **Primary source:** We used **Our World in Data – Population Growth**, using the **UN World Population Prospects 2024** series for our project.
@@ -91,20 +92,27 @@ library(knitr)
 - 🧱 **Raw structure:** The original total population file contained **4 columns** — **Entity**, **Code**, **Year**, and **All years**, which we later renamed to **Population** for clarity.
 
 :::
+
 :::
+
 ::: {.column width="38%"}
+
 :::: {.callout-note}
 ### Limitations
 
 - ⚠️ **Historical Scope** — We focused only on **UN-based** period instead of OWID’s longer-run population estimates before 1950.
+
 - ⚠️ **Aggregate rows** — The raw files include entries such as **World** and **Africa (UN)**, so these were excluded from country-level mapping.
+
 - ⚠️ **Derived variables** — Female population was calculated from **total population − male population**.
+
 - ⚠️ **Non-sovereign countries** — The source includes special cases such as **Palestine** and **Vatican**, not only sovereign states.
 
 <br>
 
 **🔗 Source page:**  
 [Our World in Data – Population Growth](https://ourworldindata.org/population-growth)
+
 ::: {style="font-size: 0.78em; margin-top: 10px; line-height: 1.35; opacity: 0.95;"}
 **Citation:** United Nations, *World Population Prospects 2024* — processed by *Our World in Data*
 :::
@@ -120,10 +128,14 @@ library(knitr)
 
 <hr>
 
-::: {style="font-size: 0.95em; line-height: 2.5;"}
+::: {style="font-size: 0.95em; line-height: 2;"}
+
 - 🎯 **Why this visualization was chosen** — The source data had strong potential to be cleaned, enriched, and redesigned into a more insightful visual story.
+
 - 👥 **Beyond population size** — Total population mainly shows **how many people** there are, but not enough about the **composition of that population**.
+
 - 🔍 **A more meaningful question** — Instead of only asking which countries are larger, we asked whether populations are **more balanced or more uneven by gender**.
+
 - 🚀 **Supports our redesign** — This allowed us to move from a simple population dataset to a richer visualization that communicates **pattern, comparison, and insight**, not just magnitude.
 :::
 
