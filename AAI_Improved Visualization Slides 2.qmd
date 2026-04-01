@@ -1,0 +1,399 @@
+---
+format:
+  revealjs:
+    self-contained: true
+    embed-resources: true
+    theme: default
+    width: 1600
+    height: 900
+    margin: 0.05
+    scrollable: true
+    slide-number: true
+---
+
+## Improved Visualization
+
+::: columns
+::: {.column width="30%"}
+::: {style="font-size: 0.75em;"}
+**What we changed:**
+
+- 🎨 **Diverging color scale** — pink = more female, blue = more male, white = balanced
+- 📅 **Year slider** — explore 1950 to 2023
+- 🌍 **Continent filter** — isolate any region
+- 🖱️ **Hover tooltips** — full country details on demand
+- 📊 **Gender imbalance index** — quantified and visualized per country
+:::
+:::
+
+::: {.column width="70%"}
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+library(plotly)
+library(dplyr)
+library(readr)
+library(scales)
+library(countrycode)
+
+cleaned_population_with_growth <- read_csv("data/cleaned_population_with_growth.csv", show_col_types = FALSE)
+
+cleaned_population_final <- cleaned_population_with_growth %>%
+  mutate(
+    Continent = countrycode(sourcevar = Entity,
+                            origin = "country.name",
+                            destination = "continent"),
+    Continent = recode(Continent, "Americas" = "America")
+  )
+
+map_data <- cleaned_population_final %>%
+  filter(!is.na(Code), !is.na(Continent)) %>%
+  mutate(
+    Imbalance_Index = (Male_Population - Female_Population) / Population * 100,
+    Male_Pct = Male_Population / Population * 100,
+    Female_Pct = Female_Population / Population * 100
+  )
+
+continents <- sort(unique(map_data$Continent))
+all_years <- sort(unique(map_data$Year))
+yr_data_init <- map_data %>% filter(Year == max(all_years))
+
+continent_buttons <- lapply(c("All", continents), function(cont) {
+  if (cont == "All") {
+    z_vals <- yr_data_init$Imbalance_Index
+  } else {
+    z_vals <- ifelse(yr_data_init$Continent == cont,
+                     yr_data_init$Imbalance_Index, NA)
+  }
+  list(
+    method = "restyle",
+    label = cont,
+    args = list(list(
+      z = list(z_vals),
+      locations = list(yr_data_init$Code)
+    ))
+  )
+})
+
+frames <- lapply(all_years, function(yr) {
+  yr_data <- map_data %>% filter(Year == yr)
+  list(
+    data = list(list(
+      type = "choropleth",
+      locations = yr_data$Code,
+      z = yr_data$Imbalance_Index,
+      text = paste0(
+        "<b>", yr_data$Entity, "</b><br>",
+        "Continent: ", yr_data$Continent, "<br>",
+        "Year: ", yr, "<br>",
+        "Total Population: ", scales::comma(yr_data$Population), "<br>",
+        "Male: ", scales::comma(yr_data$Male_Population), " (", round(yr_data$Male_Pct, 1), "%)<br>",
+        "Female: ", scales::comma(yr_data$Female_Population), " (", round(yr_data$Female_Pct, 1), "%)<br>",
+        "Imbalance Index: ", round(yr_data$Imbalance_Index, 2)
+      )
+    )),
+    name = as.character(yr),
+    traces = list(0)
+  )
+})
+
+slider_steps <- lapply(all_years, function(yr) {
+  list(
+    args = list(
+      list(as.character(yr)),
+      list(
+        mode = "immediate",
+        frame = list(duration = 300, redraw = TRUE),
+        transition = list(duration = 100)
+      )
+    ),
+    label = as.character(yr),
+    method = "animate"
+  )
+})
+
+fig <- plot_ly(
+  data = yr_data_init,
+  type = "choropleth",
+  locations = ~Code,
+  locationmode = "ISO-3",
+  z = ~Imbalance_Index,
+  text = ~paste0(
+    "<b>", Entity, "</b><br>",
+    "Continent: ", Continent, "<br>",
+    "Year: ", Year, "<br>",
+    "Total Population: ", scales::comma(Population), "<br>",
+    "Male: ", scales::comma(Male_Population), " (", round(Male_Pct, 1), "%)<br>",
+    "Female: ", scales::comma(Female_Population), " (", round(Female_Pct, 1), "%)<br>",
+    "Imbalance Index: ", round(Imbalance_Index, 2)
+  ),
+  hoverinfo = "text",
+  colorscale = list(
+    list(0.0, "#C2185B"),
+    list(0.5, "#FFFFFF"),
+    list(1.0, "#1565C0")
+  ),
+  zmin = -15,
+  zmax = 15,
+  colorbar = list(
+    title = "Gender Imbalance<br>(% Male excess)",
+    tickvals = c(-15, -10, -5, 0, 5, 10, 15),
+    ticktext = c("-15% (F)", "-10%", "-5%", "0 (Balanced)", "+5%", "+10%", "+15% (M)"),
+    x = 1.0,
+    y = 1.0,
+    yanchor = "top"
+  )
+) %>%
+  layout(
+    title = list(
+      text = "Global Gender Imbalance Over Time (1950–2023)",
+      font = list(size = 16)
+    ),
+    geo = list(
+      showframe = FALSE,
+      showcoastlines = TRUE,
+      projection = list(type = "natural earth")
+    ),
+    updatemenus = list(
+      list(
+        type = "buttons",
+        direction = "down",
+        x = 1.02,
+        y = 0.42,
+        xanchor = "left",
+        yanchor = "top",
+        pad = list(t = 5, r = 5),
+        bgcolor = "#ffffff",
+        bordercolor = "#cccccc",
+        borderwidth = 1,
+        font = list(size = 11),
+        buttons = continent_buttons
+      )
+    ),
+    sliders = list(
+      list(
+        active = length(all_years) - 1,
+        steps = slider_steps,
+        x = 0.02,
+        y = 0.02,
+        len = 0.96,
+        currentvalue = list(
+          prefix = "Year: ",
+          visible = TRUE,
+          xanchor = "center",
+          font = list(size = 13)
+        ),
+        transition = list(duration = 100),
+        pad = list(t = 30)
+      )
+    ),
+    annotations = list(
+      list(
+        text = "<b>Filter by Continent</b><br><sup>(static view only)</sup>",
+        x = 1.02,
+        y = 0.47,
+        xref = "paper",
+        yref = "paper",
+        showarrow = FALSE,
+        font = list(size = 11),
+        xanchor = "left"
+      )
+    ),
+    margin = list(l = 10, r = 160, t = 50, b = 100)
+  )
+
+fig$x$frames <- frames
+fig
+```
+:::
+:::
+
+---
+
+## Demo
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+library(plotly)
+library(dplyr)
+library(readr)
+library(scales)
+library(countrycode)
+
+cleaned_population_with_growth <- read_csv("data/cleaned_population_with_growth.csv", show_col_types = FALSE)
+
+cleaned_population_final <- cleaned_population_with_growth %>%
+  mutate(
+    Continent = countrycode(sourcevar = Entity,
+                            origin = "country.name",
+                            destination = "continent"),
+    Continent = recode(Continent, "Americas" = "America")
+  )
+
+map_data <- cleaned_population_final %>%
+  filter(!is.na(Code), !is.na(Continent)) %>%
+  mutate(
+    Imbalance_Index = (Male_Population - Female_Population) / Population * 100,
+    Male_Pct = Male_Population / Population * 100,
+    Female_Pct = Female_Population / Population * 100
+  )
+
+continents <- sort(unique(map_data$Continent))
+all_years <- sort(unique(map_data$Year))
+yr_data_init <- map_data %>% filter(Year == max(all_years))
+
+continent_buttons <- lapply(c("All", continents), function(cont) {
+  if (cont == "All") {
+    z_vals <- yr_data_init$Imbalance_Index
+  } else {
+    z_vals <- ifelse(yr_data_init$Continent == cont,
+                     yr_data_init$Imbalance_Index, NA)
+  }
+  list(
+    method = "restyle",
+    label = cont,
+    args = list(list(
+      z = list(z_vals),
+      locations = list(yr_data_init$Code)
+    ))
+  )
+})
+
+frames <- lapply(all_years, function(yr) {
+  yr_data <- map_data %>% filter(Year == yr)
+  list(
+    data = list(list(
+      type = "choropleth",
+      locations = yr_data$Code,
+      z = yr_data$Imbalance_Index,
+      text = paste0(
+        "<b>", yr_data$Entity, "</b><br>",
+        "Continent: ", yr_data$Continent, "<br>",
+        "Year: ", yr, "<br>",
+        "Total Population: ", scales::comma(yr_data$Population), "<br>",
+        "Male: ", scales::comma(yr_data$Male_Population), " (", round(yr_data$Male_Pct, 1), "%)<br>",
+        "Female: ", scales::comma(yr_data$Female_Population), " (", round(yr_data$Female_Pct, 1), "%)<br>",
+        "Imbalance Index: ", round(yr_data$Imbalance_Index, 2)
+      )
+    )),
+    name = as.character(yr),
+    traces = list(0)
+  )
+})
+
+slider_steps <- lapply(all_years, function(yr) {
+  list(
+    args = list(
+      list(as.character(yr)),
+      list(
+        mode = "immediate",
+        frame = list(duration = 300, redraw = TRUE),
+        transition = list(duration = 100)
+      )
+    ),
+    label = as.character(yr),
+    method = "animate"
+  )
+})
+
+fig2 <- plot_ly(
+  data = yr_data_init,
+  type = "choropleth",
+  locations = ~Code,
+  locationmode = "ISO-3",
+  z = ~Imbalance_Index,
+  text = ~paste0(
+    "<b>", Entity, "</b><br>",
+    "Continent: ", Continent, "<br>",
+    "Year: ", Year, "<br>",
+    "Total Population: ", scales::comma(Population), "<br>",
+    "Male: ", scales::comma(Male_Population), " (", round(Male_Pct, 1), "%)<br>",
+    "Female: ", scales::comma(Female_Population), " (", round(Female_Pct, 1), "%)<br>",
+    "Imbalance Index: ", round(Imbalance_Index, 2)
+  ),
+  hoverinfo = "text",
+  colorscale = list(
+    list(0.0, "#C2185B"),
+    list(0.5, "#FFFFFF"),
+    list(1.0, "#1565C0")
+  ),
+  zmin = -15,
+  zmax = 15,
+  colorbar = list(
+    title = "Gender Imbalance<br>(% Male excess)",
+    tickvals = c(-15, -10, -5, 0, 5, 10, 15),
+    ticktext = c("-15% (F)", "-10%", "-5%", "0 (Balanced)", "+5%", "+10%", "+15% (M)"),
+    x = 1.0,
+    y = 1.0,
+    yanchor = "top"
+  )
+) %>%
+  layout(
+  title = list(
+    text = "Global Gender Imbalance Over Time (1950–2023)",
+    font = list(size = 18)
+  ),
+  geo = list(
+    showframe = FALSE,
+    showcoastlines = TRUE,
+    projection = list(type = "natural earth"),
+    domain = list(x = c(0, 1))  
+  ),
+  updatemenus = list(
+    list(
+      type = "buttons",
+      direction = "down",
+      x = 1.05,   
+      y = 0.42,
+      xanchor = "left",
+      yanchor = "top",
+      pad = list(t = 5, r = 5),
+      bgcolor = "#ffffff",
+      bordercolor = "#cccccc",
+      borderwidth = 1,
+      font = list(size = 11),
+      buttons = continent_buttons
+    )
+  ),
+  sliders = list(
+    list(
+      active = length(all_years) - 1,
+      steps = slider_steps,
+      x = 0.02,
+      y = 0.02,
+      len = 0.96,
+      currentvalue = list(
+        prefix = "Year: ",
+        visible = TRUE,
+        xanchor = "center",
+        font = list(size = 14)
+      ),
+      transition = list(duration = 100),
+      pad = list(t = 30)
+    )
+  ),
+  annotations = list(
+    list(
+      text = "<b>Filter by Continent</b><br><sup>(static view only)</sup>",
+      x = 1.05,   
+      y = 0.47,
+      xref = "paper",
+      yref = "paper",
+      showarrow = FALSE,
+      font = list(size = 12),
+      xanchor = "left"
+    )
+  ),
+  colorbar = list(
+    x = 1.05  
+  ),
+  margin = list(l = 10, r = 160, t = 60, b = 100)
+)
+
+fig2$x$frames <- frames
+fig2
+```
