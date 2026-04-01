@@ -67,10 +67,10 @@ library(knitr)
 
 ::: {style="line-height: 2.4;"}
 - 🌍 **Interactive choropleth map** — Uses familiar geography boundaries, and reduces clutter
-- 📅 **Year slider (1950–2023)** — Integrated slider that reveals evolution of population over time
-- 🎨 **Diverging colour scale** — Pink = more female, Blue = more male, making gender imbalance immediately visible
 - 🌐 **Data on demand UI** — Continent filters and hover tooltips to reduce visual overload
+- 📅 **Year slider (1950–2023)** — Integrated slider that reveals evolution of population over time
 - ⚧ **Gender Imbalance Index** — Custom metric that quantifies male/female deviation per country
+- 🎨 **Diverging colour scale** — Pink = more female, Blue = more male, making gender imbalance immediately visible
 :::
 
 ## Data Selection and Sources - Izwan{#data-selection}
